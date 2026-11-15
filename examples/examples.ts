@@ -8,7 +8,7 @@
 import {
   createNadeshikoClient,
   NadeshikoError,
-} from '@brigadasos/nadeshiko-sdk';
+} from '@nadeshiko/nadeshiko-sdk';
 
 // Client setup
 

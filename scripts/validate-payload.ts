@@ -18,7 +18,7 @@ type DerivedVersions = {
   internalOnly: boolean;
 };
 
-const BACKEND_REPO = 'BrigadaSOS/Nadeshiko';
+const BACKEND_REPO = 'Natsume-197/Nadeshiko';
 const SPEC_PATH = 'backend/docs/generated/openapi.yaml';
 
 const SEMVER_REGEX =

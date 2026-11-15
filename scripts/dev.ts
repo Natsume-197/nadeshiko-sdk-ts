@@ -69,5 +69,5 @@ for (const target of targets) {
 
 console.log('\n✓ Local SDK build ready at build/{public,internal}');
 console.log('  Frontend can consume this via:');
-console.log('    "@brigadasos/nadeshiko-sdk": "file:../nadeshiko-sdk-ts/build/public"');
+console.log('    "@nadeshiko/nadeshiko-sdk": "file:../nadeshiko-sdk-ts/build/public"');
 console.log('  or `bun link` / `npm link` from build/{public,internal}.\n');

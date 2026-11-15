@@ -1,17 +1,17 @@
 {
-  "name": "@brigadasos/nadeshiko-sdk-build",
+  "name": "@nadeshiko/nadeshiko-sdk-build",
   "version": "2.6.0",
   "description": "TypeScript SDK for Nadeshiko API",
   "private": true,
   "license": "MIT",
-  "author": "BrigadaSOS",
+  "author": "Nadeshiko",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BrigadaSOS/nadeshiko-sdk-ts.git"
+    "url": "git+https://github.com/Natsume-197/nadeshiko-sdk-ts.git"
   },
   "homepage": "https://nadeshiko.co",
   "bugs": {
-    "url": "https://github.com/BrigadaSOS/nadeshiko-sdk-ts/issues"
+    "url": "https://github.com/Natsume-197/nadeshiko-sdk-ts/issues"
   },
   "keywords": [
     "nadeshiko",

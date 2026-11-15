@@ -5,13 +5,13 @@ TypeScript SDK for the [Nadeshiko API](https://nadeshiko.co). Full API reference
 ## Install
 
 ```bash
-npm add @brigadasos/nadeshiko-sdk
+npm add @nadeshiko/nadeshiko-sdk
 ```
 
 ## Quick start
 
 ```typescript
-import { createNadeshikoClient } from '@brigadasos/nadeshiko-sdk';
+import { createNadeshikoClient } from '@nadeshiko/nadeshiko-sdk';
 
 const client = createNadeshikoClient({
   apiKey: process.env.NADESHIKO_API_KEY!,
@@ -101,7 +101,7 @@ const client = createNadeshikoClient({
 Errors throw a `NadeshikoError`. A proper `Error` subclass with all RFC 7807 Problem Details fields.
 
 ```typescript
-import { NadeshikoError } from '@brigadasos/nadeshiko-sdk';
+import { NadeshikoError } from '@nadeshiko/nadeshiko-sdk';
 
 try {
   const data = await client.search({ query: { search: '食べる' } });
