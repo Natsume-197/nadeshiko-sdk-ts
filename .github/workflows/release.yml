@@ -56,11 +56,11 @@ jobs:
         id: payload
         run: bun run scripts/validate-payload.ts
 
-      - name: Check npm for existing versions
+      - name: Check npm for existing version
         id: npm_check
         run: |
           set -euo pipefail
-          PKG="@brigadasos/nadeshiko-sdk"
+          PKG="@nadeshiko/nadeshiko-sdk"
           CHANNEL="${{ steps.payload.outputs.release_channel }}"
 
           PUBLIC_EXISTS="false"
@@ -71,33 +71,19 @@ jobs:
             fi
           fi
 
-          INTERNAL_EXISTS="false"
-          VERSION="${{ steps.payload.outputs.internal_version }}"
-          if npm view "${PKG}@${VERSION}" version 2>/dev/null | grep -q .; then
-            INTERNAL_EXISTS="true"
-          fi
-
           echo "public_exists=${PUBLIC_EXISTS}" >> "$GITHUB_OUTPUT"
-          echo "internal_exists=${INTERNAL_EXISTS}" >> "$GITHUB_OUTPUT"
 
+      # The internal SDK is not published to npm; an internal run only regenerates
+      # generated/internal and commits it when it changed.
       - name: Check if release should be skipped
         id: skip
         run: |
           set -euo pipefail
           SKIP="false"
           SKIP_REASON=""
-          CHANNEL="${{ steps.payload.outputs.release_channel }}"
-
-          if [[ "${CHANNEL}" == "internal" ]]; then
-            if [[ "${{ steps.npm_check.outputs.internal_exists }}" == "true" ]]; then
-              SKIP="true"
-              SKIP_REASON="internal version already exists on npm"
-            fi
-          else
-            if [[ "${{ steps.npm_check.outputs.public_exists }}" == "true" && "${{ steps.npm_check.outputs.internal_exists }}" == "true" ]]; then
-              SKIP="true"
-              SKIP_REASON="both public and internal versions already exist on npm"
-            fi
+          if [[ "${{ steps.npm_check.outputs.public_exists }}" == "true" ]]; then
+            SKIP="true"
+            SKIP_REASON="public version already exists on npm"
           fi
 
           echo "skip=${SKIP}" >> "$GITHUB_OUTPUT"
@@ -112,7 +98,7 @@ jobs:
             echo "- Reason: ${{ steps.skip.outputs.skip_reason }}"
             echo "- Channel: \`${{ steps.payload.outputs.release_channel }}\`"
             echo "- Spec version: \`${{ steps.payload.outputs.spec_version }}\`"
-            echo "- Internal version: \`@brigadasos/nadeshiko-sdk@${{ steps.payload.outputs.internal_version }}\`"
+            echo "- Public version: \`@nadeshiko/nadeshiko-sdk@${{ steps.payload.outputs.public_version }}\`"
             echo "- Bump the spec version to publish a new release."
           } >> "$GITHUB_STEP_SUMMARY"
 
@@ -192,11 +178,6 @@ jobs:
         working-directory: build/public
         run: npm publish --access public --provenance --tag "${{ steps.payload.outputs.dist_tag }}"
 
-      - name: Publish internal SDK
-        if: steps.skip.outputs.skip != 'true' && steps.npm_check.outputs.internal_exists != 'true'
-        working-directory: build/internal
-        run: npm publish --access public --provenance --tag "${{ steps.payload.outputs.internal_dist_tag }}"
-
       - name: Create tag
         if: steps.skip.outputs.skip != 'true' && steps.payload.outputs.release_channel == 'stable'
         env:
@@ -239,23 +220,23 @@ jobs:
             - Backend SHA: `${{ steps.payload.outputs.backend_sha }}`
             - OpenAPI spec: `${{ steps.payload.outputs.spec_url }}`
             - Spec version: `${{ steps.payload.outputs.spec_version }}`
-            - npm public: `@brigadasos/nadeshiko-sdk@${{ steps.payload.outputs.public_version }}` (dist-tag `${{ steps.payload.outputs.dist_tag }}`)
-            - npm internal: `@brigadasos/nadeshiko-sdk@${{ steps.payload.outputs.internal_version }}` (dist-tag `${{ steps.payload.outputs.internal_dist_tag }}`)
+            - npm: `@nadeshiko/nadeshiko-sdk@${{ steps.payload.outputs.public_version }}` (dist-tag `${{ steps.payload.outputs.dist_tag }}`)
+            - Internal SDK `${{ steps.payload.outputs.internal_version }}`: release assets only, not on npm
 
       - name: Summary
         if: steps.skip.outputs.skip != 'true'
         run: |
           CHANNEL="${{ steps.payload.outputs.release_channel }}"
           {
-            echo "## SDK Release Published"
+            echo "## SDK Release"
             echo ""
             echo "- Channel: \`${CHANNEL}\`"
             echo "- Spec version: \`${{ steps.payload.outputs.spec_version }}\`"
             if [[ "${CHANNEL}" == "stable" ]]; then
               echo "- Tag: \`${{ steps.payload.outputs.release_tag }}\`"
-              echo "- npm public: \`@brigadasos/nadeshiko-sdk@${{ steps.payload.outputs.public_version }}\` (dist-tag \`${{ steps.payload.outputs.dist_tag }}\`)"
+              echo "- npm: \`@nadeshiko/nadeshiko-sdk@${{ steps.payload.outputs.public_version }}\` (dist-tag \`${{ steps.payload.outputs.dist_tag }}\`)"
             fi
-            echo "- npm internal: \`@brigadasos/nadeshiko-sdk@${{ steps.payload.outputs.internal_version }}\` (dist-tag \`${{ steps.payload.outputs.internal_dist_tag }}\`)"
+            echo "- Internal SDK: \`${{ steps.payload.outputs.internal_version }}\` (not published to npm)"
             echo "- Backend: \`${{ steps.payload.outputs.backend_repo }}@${{ steps.payload.outputs.backend_sha }}\`"
             echo "- Spec URL: \`${{ steps.payload.outputs.spec_url }}\`"
           } >> "$GITHUB_STEP_SUMMARY"

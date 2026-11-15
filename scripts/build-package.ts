@@ -135,7 +135,7 @@ function main(): void {
   }
 
   const publishPackage = {
-    name: '@brigadasos/nadeshiko-sdk',
+    name: '@nadeshiko/nadeshiko-sdk',
     version: publishVersion,
     description: target === 'internal'
       ? 'TypeScript SDK for Nadeshiko API (internal build - includes internal endpoints)'
@@ -144,9 +144,10 @@ function main(): void {
     module: './dist/index.js',
     types: './dist/index.d.ts',
     type: 'module',
-    private: false,
+    // The internal build is never published (it exposes the admin API shape); it ships only as a GitHub Release asset.
+    private: target === 'internal',
     license: rootPackage.license || 'MIT',
-    author: rootPackage.author || 'BrigadaSOS',
+    author: rootPackage.author || 'Nadeshiko',
     repository: rootPackage.repository,
     homepage: rootPackage.homepage,
     bugs: rootPackage.bugs,
