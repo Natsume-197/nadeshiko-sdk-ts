@@ -24,7 +24,7 @@ export interface NadeshikoProblemDetails {
  *
  * @example
  * ```ts
- * import { NadeshikoError } from '@brigadasos/nadeshiko-sdk';
+ * import { NadeshikoError } from '@nadeshiko/nadeshiko-sdk';
  *
  * try {
  *   const { data } = await client.search({ body: { query: { search: '猫' } } });
