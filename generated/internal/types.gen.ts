@@ -4,29 +4,77 @@ export type ClientOptions = {
     baseUrl: 'https://api.nadeshiko.co' | (string & {});
 };
 
-export type RoadmapItem = {
+/**
+ * A reader's request for content, shared by everyone who wants the same title.
+ */
+export type ContentRequest = {
     id: string;
-    kind: 'CONTENT' | 'FEATURE';
-    status: 'PROPOSED' | 'CONSIDERING' | 'PLANNED' | 'IN_PROGRESS' | 'RELEASED' | 'DECLINED';
+    category: 'ANIME' | 'JDRAMA' | 'YOUTUBE' | 'AUDIOBOOK';
+    /**
+     * NEW asks for a title not on Nadeshiko; UPDATE asks for more of one that is.
+     */
+    kind: 'NEW' | 'UPDATE';
+    status: 'OPEN' | 'PLANNED' | 'IN_PROGRESS' | 'RELEASED' | 'DECLINED';
     title: string;
-    description: string;
-    sourceUrl: string | null;
+    note: string;
+    sourceUrl: string;
     coverUrl: string | null;
-    targetDate: string | null;
     /**
-     * Nadeshiko version that introduced this feature.
+     * Why a declined request was declined; null otherwise.
      */
-    introducedInVersion: string | null;
-    sortOrder: number;
+    declineReason: string | null;
+    voteCount: number;
+    boostCount: number;
+    /**
+     * Votes plus five per boost.
+     */
+    score: number;
+    /**
+     * The published media this request is for (UPDATE) or produced (RELEASED).
+     */
+    media: {
+        id: string;
+        slug: string;
+        name: string;
+    } | null;
     createdAt: string;
+    releasedAt: string | null;
+};
+
+/**
+ * Bad Request error response
+ */
+export type Error400 = {
     /**
-     * Optional public credit chosen by the proposer or an admin.
+     * Specific error code for programmatic handling
      */
-    proposerName: string | null;
+    code: 'VALIDATION_FAILED' | 'INVALID_JSON' | 'INVALID_REQUEST';
     /**
-     * Present on admin responses only.
+     * A short, human-readable summary of the problem
      */
-    requesterUserId?: number | null;
+    title: string;
+    /**
+     * A human-readable explanation specific to this occurrence
+     */
+    detail: string;
+    /**
+     * A URI reference that identifies the problem type (`about:blank` when the problem has no further semantics beyond the HTTP status, per RFC 9457)
+     */
+    type?: string;
+    /**
+     * A URI reference that identifies the specific occurrence (e.g., trace ID)
+     */
+    instance?: string;
+    /**
+     * The HTTP status code
+     */
+    status: 400;
+    /**
+     * Optional map of field names to their error messages (for validation errors)
+     */
+    errors?: {
+        [key: string]: string;
+    };
 };
 
 /**
@@ -93,42 +141,6 @@ export type Error500 = {
      * The HTTP status code
      */
     status: 500;
-    /**
-     * Optional map of field names to their error messages (for validation errors)
-     */
-    errors?: {
-        [key: string]: string;
-    };
-};
-
-/**
- * Bad Request error response
- */
-export type Error400 = {
-    /**
-     * Specific error code for programmatic handling
-     */
-    code: 'VALIDATION_FAILED' | 'INVALID_JSON' | 'INVALID_REQUEST';
-    /**
-     * A short, human-readable summary of the problem
-     */
-    title: string;
-    /**
-     * A human-readable explanation specific to this occurrence
-     */
-    detail: string;
-    /**
-     * A URI reference that identifies the problem type (`about:blank` when the problem has no further semantics beyond the HTTP status, per RFC 9457)
-     */
-    type?: string;
-    /**
-     * A URI reference that identifies the specific occurrence (e.g., trace ID)
-     */
-    instance?: string;
-    /**
-     * The HTTP status code
-     */
-    status: 400;
     /**
      * Optional map of field names to their error messages (for validation errors)
      */
@@ -210,6 +222,174 @@ export type Error403 = {
 };
 
 /**
+ * Not Found error response
+ */
+export type Error404 = {
+    /**
+     * Specific error code for programmatic handling
+     */
+    code: 'NOT_FOUND';
+    /**
+     * A short, human-readable summary of the problem
+     */
+    title: string;
+    /**
+     * A human-readable explanation specific to this occurrence
+     */
+    detail: string;
+    /**
+     * A URI reference that identifies the problem type (`about:blank` when the problem has no further semantics beyond the HTTP status, per RFC 9457)
+     */
+    type?: string;
+    /**
+     * A URI reference that identifies the specific occurrence (e.g., trace ID)
+     */
+    instance?: string;
+    /**
+     * The HTTP status code
+     */
+    status: 404;
+    /**
+     * Optional map of field names to their error messages (for validation errors)
+     */
+    errors?: {
+        [key: string]: string;
+    };
+};
+
+/**
+ * Conflict error response
+ */
+export type Error409 = {
+    /**
+     * Specific error code for programmatic handling
+     */
+    code: 'ACCOUNT_CONFLICT' | 'DUPLICATE_KEY';
+    /**
+     * A short, human-readable summary of the problem
+     */
+    title: string;
+    /**
+     * A human-readable explanation specific to this occurrence
+     */
+    detail: string;
+    /**
+     * A URI reference that identifies the problem type (`about:blank` when the problem has no further semantics beyond the HTTP status, per RFC 9457)
+     */
+    type?: string;
+    /**
+     * A URI reference that identifies the specific occurrence (e.g., trace ID)
+     */
+    instance?: string;
+    /**
+     * The HTTP status code
+     */
+    status: 409;
+    /**
+     * Optional map of field names to their error messages (for validation errors)
+     */
+    errors?: {
+        [key: string]: string;
+    };
+};
+
+/**
+ * One entry in the reader's notification centre (the bell).
+ */
+export type Notification = {
+    id: string;
+    /**
+     * `word-available`: watched words that started returning sentences.
+     * `word-digest`: new sentences for followed words this week.
+     * `request-update`: a content request the reader backed started or shipped.
+     *
+     */
+    kind: 'word-available' | 'word-digest' | 'request-update';
+    /**
+     * What the site needs to draw the entry. Word kinds carry `words`, a list of
+     * `{ query, matchMode, titles, sentences | newSentences }` (the site builds the
+     * link from the query and match mode); `request-update` carries
+     * `{ status, title, path }`.
+     *
+     */
+    payload: {
+        [key: string]: unknown;
+    };
+    read: boolean;
+    createdAt: string;
+};
+
+/**
+ * One of the reader's word alerts.
+ */
+export type WordWatch = {
+    id: string;
+    /**
+     * The watched word, NFKC-normalised.
+     */
+    query: string;
+    matchMode: 'WORD' | 'EXACT' | 'CONTAINS';
+    /**
+     * `FIRST`: one notice when the word starts returning sentences, then the
+     * alert is `FULFILLED`. `NEW_SENTENCES`: a weekly digest of new sentences.
+     *
+     */
+    mode: 'FIRST' | 'NEW_SENTENCES';
+    status: 'ACTIVE' | 'FULFILLED' | 'PAUSED';
+    lastNotifiedAt: string | null;
+    createdAt: string;
+};
+
+export type WordWatchSetResponse = {
+    watch: WordWatch;
+    outcome: 'created' | 'updated';
+    /**
+     * Sentences the word has in the reader's own search right now.
+     */
+    sentenceCount: number;
+    /**
+     * A new-sentences alert on a word so common that the weekly digest will bring a lot; the site warns.
+     */
+    commonWord: boolean;
+};
+
+/**
+ * Service Unavailable error response
+ */
+export type Error503 = {
+    /**
+     * Specific error code for programmatic handling
+     */
+    code: 'SERVICE_OVERLOADED';
+    /**
+     * A short, human-readable summary of the problem
+     */
+    title: string;
+    /**
+     * A human-readable explanation specific to this occurrence
+     */
+    detail: string;
+    /**
+     * A URI reference that identifies the problem type (`about:blank` when the problem has no further semantics beyond the HTTP status, per RFC 9457)
+     */
+    type?: string;
+    /**
+     * A URI reference that identifies the specific occurrence (e.g., trace ID)
+     */
+    instance?: string;
+    /**
+     * The HTTP status code
+     */
+    status: 503;
+    /**
+     * Optional map of field names to their error messages (for validation errors)
+     */
+    errors?: {
+        [key: string]: string;
+    };
+};
+
+/**
  * What to search for (omit for queryless browse/stats)
  */
 export type SearchQuery = {
@@ -218,9 +398,17 @@ export type SearchQuery = {
      */
     search?: string;
     /**
-     * Require exact phrase matching (disables fuzzy and partial matches)
+     * Require exact phrase matching (disables fuzzy and partial matches). Same as `matchMode` `EXACT`; ignored when `matchMode` is set.
      */
     exactMatch?: boolean;
+    /**
+     * How the Japanese text is matched. When omitted, `exactMatch` decides between `WORD` and `EXACT`.
+     * - `WORD` (default): whole words, in surface, dictionary and normalized form, plus EN/ES translations
+     * - `EXACT`: the exact phrase, surface form only
+     * - `CONTAINS`: Japanese words that contain the text anywhere, so `糊` finds `血糊` and `糊付け`. It matches inside one word only (`糊が` matches nothing, since `糊` and `が` are separate words), and space-separated terms must all match. A `*` at either end of a term is ignored; other wildcards and boolean operators are taken literally, and leading-`-` exclusions still work. In `WORD` mode, a query made only of Japanese terms with a leading `*` (`*憬*`, `*憬`) is searched this way. Translations are not searched, and results are not ranked by relevance within the mode
+     *
+     */
+    matchMode?: 'WORD' | 'EXACT' | 'CONTAINS';
 };
 
 /**
@@ -234,10 +422,17 @@ export type SearchSort = {
      * `preferMedia` titles as a first block; see `preferMedia`
      * - `ASC` / `DESC`: by segment length (character count)
      * - `TIME_ASC` / `TIME_DESC`: by episode & position within an episode
+     * - `DIFFICULTY_ASC` / `DIFFICULTY_DESC`: by estimated difficulty, then by length in the same direction.
+     * Each content word is ranked on an anime word-frequency list; the two rarest distinct words set the order
+     * (the rarest first, then the second rarest), and longer conjugations (食べさせられた over 食べた) raise a
+     * sentence within the group its rarest word sets. Proper names and words not on the list count as a moderately
+     * rare word (rank 5,000), not the rarest. It does not measure speech speed. In both directions, full sentences
+     * of ordinary length (6 to 40 letters) come first; then very short, very long, multi-sentence or stuttered
+     * ones; then one-word and cut-off lines; segments without a scorable word come last
      * - `RANDOM`: deterministic random order (pass `seed` for reproducibility)
      *
      */
-    mode?: 'RELEVANCE' | 'ASC' | 'DESC' | 'TIME_ASC' | 'TIME_DESC' | 'RANDOM';
+    mode?: 'RELEVANCE' | 'ASC' | 'DESC' | 'TIME_ASC' | 'TIME_DESC' | 'DIFFICULTY_ASC' | 'DIFFICULTY_DESC' | 'RANDOM';
     /**
      * Non-negative integer seed for deterministic random sorting (only used when mode is RANDOM)
      */
@@ -256,6 +451,14 @@ export type MediaFilterItem = {
      * Specific episodes (omit for all episodes). Use 0 for movies/specials
      */
     episodes?: Array<number>;
+    /**
+     * Inclusive lower episode bound (e.g. exclude episodes above a reader's current progress)
+     */
+    minEpisode?: number;
+    /**
+     * Inclusive upper episode bound (e.g. include only episodes up to a reader's current progress)
+     */
+    maxEpisode?: number;
 };
 
 /**
@@ -576,13 +779,17 @@ export type Segment = {
 };
 
 /**
- * External IDs for this media, keyed by source. Responses always carry every source as a key, with null for absent mappings. In requests `asin` may be omitted, so clients that predate it keep working.
+ * External IDs for this media, keyed by source. Responses always carry every source as a key, with null for absent mappings. In requests `asin` and `mal` may be omitted, so clients that predate it keep working.
  */
 export type ExternalId = {
     /**
      * AniList ID
      */
     anilist: string;
+    /**
+     * MyAnimeList ID
+     */
+    mal?: string;
     /**
      * IMDB ID
      */
@@ -731,42 +938,6 @@ export type SearchResponse = {
 };
 
 /**
- * Service Unavailable error response
- */
-export type Error503 = {
-    /**
-     * Specific error code for programmatic handling
-     */
-    code: 'SERVICE_OVERLOADED';
-    /**
-     * A short, human-readable summary of the problem
-     */
-    title: string;
-    /**
-     * A human-readable explanation specific to this occurrence
-     */
-    detail: string;
-    /**
-     * A URI reference that identifies the problem type (`about:blank` when the problem has no further semantics beyond the HTTP status, per RFC 9457)
-     */
-    type?: string;
-    /**
-     * A URI reference that identifies the specific occurrence (e.g., trace ID)
-     */
-    instance?: string;
-    /**
-     * The HTTP status code
-     */
-    status: 503;
-    /**
-     * Optional map of field names to their error messages (for validation errors)
-     */
-    errors?: {
-        [key: string]: string;
-    };
-};
-
-/**
  * Stats request. All fields are optional — omit `query` to get filter counts for the full corpus.
  *
  */
@@ -850,9 +1021,17 @@ export type SearchMultipleQuery = {
      */
     words: Array<string>;
     /**
-     * Require exact phrase matching (disables fuzzy and partial matches)
+     * Require exact phrase matching (disables fuzzy and partial matches). Same as `matchMode` `EXACT`; ignored when `matchMode` is set.
      */
     exactMatch?: boolean;
+    /**
+     * How each word is matched, as in the main search's `matchMode`. When omitted, `exactMatch` decides between `WORD` and `EXACT`.
+     * - `WORD` (default): whole words, in surface, dictionary and normalized form, plus EN/ES translations
+     * - `EXACT`: the exact phrase, surface form only
+     * - `CONTAINS`: Japanese words that contain the text anywhere, so `憬` counts sentences with `憧憬`. A word written with a leading `*` (`*憬*`) is counted this way in `WORD` mode too
+     *
+     */
+    matchMode?: 'WORD' | 'EXACT' | 'CONTAINS';
 };
 
 export type SearchMultipleRequest = {
@@ -974,6 +1153,273 @@ export type MediaSummary = {
 
 export type MediaAutocompleteResponse = {
     media: Array<MediaSummary>;
+};
+
+/**
+ * One ranked answer from Nadeshiko's dictionary (JMdict/JMnedict plus the
+ * reader's uploaded custom Yomitan dictionaries). Pitch audio is not provided yet.
+ *
+ */
+export type DictionaryCandidate = {
+    /**
+     * `<dictionary>:<ent_seq>`.
+     */
+    id: string;
+    headword: string;
+    reading: string;
+    common: boolean;
+    /**
+     * A proper name rather than a word.
+     */
+    name: boolean;
+    /**
+     * The JMdict/JMnedict entry sequence number.
+     */
+    sourceId: string;
+    dictionary: string;
+    /**
+     * Unofficial JLPT level estimate (N5-N1).
+     */
+    jlpt: string;
+    /**
+     * Rank in Nadeshiko's own corpus (1 is the most frequent word); null when not counted.
+     */
+    frequency: number;
+    /**
+     * Rank in each kind of media the word occurs in, the kind that uses it most first (by occurrences per
+     * million words of that kind). Absent when not counted.
+     *
+     */
+    frequencyByCategory?: Array<{
+        category: 'ANIME' | 'JDRAMA' | 'YOUTUBE' | 'AUDIOBOOK';
+        /**
+         * 1 is the most frequent word in that kind of media.
+         */
+        rank: number;
+        /**
+         * Occurrences per million words of that kind of media.
+         */
+        perMillion: number;
+    }>;
+    /**
+     * Frequencies from the authenticated reader's enabled custom Yomitan frequency dictionaries.
+     */
+    customFrequencies?: Array<{
+        dictionary: string;
+        dictionaryName: string;
+        value: number;
+        displayValue: string;
+    }>;
+    /**
+     * Present and true when nothing is filed under the text looked up and this word is its dictionary form
+     * (食べた → 食べる).
+     *
+     */
+    baseForm?: boolean;
+    /**
+     * With `baseForm`: what the conjugation does, in the word card's inflection labels, outermost first.
+     *
+     */
+    inflection?: Array<string>;
+    /**
+     * Accent patterns from the user's custom pitch dictionaries or UniDic fallback.
+     */
+    pitch?: Array<{
+        /**
+         * 0 is flat (heiban); n is the mora after which the pitch drops.
+         */
+        downstep: number;
+        /**
+         * A recording of the reading with this accent (Opus in Ogg), when one exists. Synthesised with
+         * VOICEVOX:四国めたん; absent for words outside the most frequent ones.
+         *
+         */
+        audioUrl?: string;
+        /**
+         * Custom pitch dictionary title when sourced from a user upload.
+         */
+        source?: string;
+        nasal?: Array<number>;
+        devoice?: Array<number>;
+        tags?: Array<string>;
+    }>;
+    /**
+     * The words a compound or expression is made of (捜査本部: 捜査, 本部), content words only, each one
+     * resolvable by the card. Absent for a word of one piece.
+     *
+     */
+    parts?: Array<{
+        text: string;
+        lemma: string;
+        reading: string;
+        id: string;
+    }>;
+    furigana?: Array<{
+        text: string;
+        ruby?: string;
+    }>;
+    forms: Array<{
+        text: string;
+        script: 'kanji' | 'kana';
+        common: boolean;
+    }>;
+    entries: Array<{
+        dictionary: string;
+        dictionaryName: string;
+        senses: Array<{
+            position: number;
+            definitions: Array<{
+                lang: 'en' | 'es' | 'ja';
+                text: string;
+                /**
+                 * Sanitized Yomitan structured-content AST for custom dictionaries.
+                 */
+                structuredContent?: unknown;
+            }>;
+            tags: Array<{
+                category: 'partOfSpeech' | 'misc' | 'field' | 'dialect';
+                code: string;
+                label: string;
+            }>;
+            notes?: Array<string>;
+        }>;
+    }>;
+};
+
+/**
+ * A word from Nadeshiko's own dictionary, as the kanji view links it.
+ */
+export type DictionaryKanjiWordRef = {
+    id: string;
+    headword: string;
+    reading: string;
+};
+
+/**
+ * Another kanji the kanji view lists, with one reading and one meaning.
+ */
+export type DictionaryKanjiRelated = {
+    character: string;
+    reading: string;
+    meaning: string;
+    /**
+     * School grade (1-6 and 8 jōyō, 9-10 jinmeiyō), to group the list.
+     */
+    grade: number;
+};
+
+/**
+ * One kanji as the word card's kanji view draws it (task 44).
+ *
+ */
+export type DictionaryKanji = {
+    character: string;
+    strokeCount: number;
+    /**
+     * KANJIDIC2 school grade. 1-6 elementary school, 8 the rest of the jōyō list, 9-10 jinmeiyō.
+     */
+    grade: number;
+    /**
+     * Rank among the 2,500 kanji most used in newspapers (KANJIDIC2).
+     */
+    frequency: number;
+    /**
+     * Rank by how often it is written in Nadeshiko's sentences (anime, drama, audiobooks and YouTube), 1 for the most written. Null until the frequency job has counted it.
+     */
+    corpusRank: number;
+    /**
+     * Current JLPT level, 5 for N5 (Jonathan Waller's unofficial lists).
+     */
+    jlpt: number;
+    /**
+     * Kanji Kentei (漢検) level it is tested at, `10級` (easiest) to `1級` (mimneko/kanji-data, CC0).
+     */
+    kanken: string;
+    /**
+     * The classical (Kangxi) radical it is filed under, named by Kanji alive.
+     */
+    radical: {
+        glyph: string;
+        number: number;
+        reading: string;
+        meaning: string;
+        /**
+         * The kanji the radical is written as, when it has a card.
+         */
+        character: string;
+    };
+    /**
+     * On readings first, then kun, each with up to three of the corpus's most frequent words read that way.
+     */
+    readings: Array<{
+        kind: 'on' | 'kun';
+        /**
+         * Katakana for on; hiragana with `.` before the okurigana for kun.
+         */
+        reading: string;
+        examples: Array<DictionaryKanjiWordRef & {
+            /**
+             * The headword split into runs, with ruby over each kanji run (JmdictFurigana).
+             */
+            furigana: Array<{
+                text: string;
+                ruby?: string;
+            }>;
+        }>;
+    }>;
+    meanings: Array<string>;
+    /**
+     * The language `meanings` are in; English when KANJIDIC2 has none in the requested one.
+     */
+    meaningsLanguage: 'en' | 'es';
+    /**
+     * The parts it is built from (KRADFILE).
+     */
+    components: Array<{
+        character: string;
+        /**
+         * The part is a kanji with a card of its own.
+         */
+        hasCard: boolean;
+        /**
+         * The kanji's first meaning, or the radical's (English) for a shape with no card.
+         */
+        meaning: string;
+    }>;
+    /**
+     * One SVG path per stroke in writing order, in KanjiVG's 109×109 view box. Empty when not drawn.
+     */
+    strokes: Array<string>;
+    /**
+     * Where KanjiVG places each stroke's number, as `[x, y]`. Empty when it has none.
+     */
+    strokeNumbers: Array<[
+        number,
+        number
+    ]>;
+    /**
+     * Words written with this kanji, most frequent in Nadeshiko's corpus first (up to 40).
+     */
+    words: Array<{
+        id: string;
+        headword: string;
+        reading: string;
+        /**
+         * Rank in Nadeshiko's corpus (1 is the most frequent word).
+         */
+        frequency: number;
+        gloss: string;
+    }>;
+    /**
+     * Other kanji filed under the same radical, school kanji first (12, or all with `related=all`).
+     */
+    sameRadical: Array<DictionaryKanjiRelated>;
+    sameRadicalCount: number;
+    /**
+     * Kanji with this one as a part and filed under another radical, school kanji first (12, or all with `related=all`).
+     */
+    containedIn: Array<DictionaryKanjiRelated>;
+    containedInCount: number;
 };
 
 /**
@@ -1213,78 +1659,6 @@ export type MediaCreateRequest = {
      * Base path for R2/CDN storage (e.g. "media/21459")
      */
     storageBasePath?: string;
-};
-
-/**
- * Conflict error response
- */
-export type Error409 = {
-    /**
-     * Specific error code for programmatic handling
-     */
-    code: 'ACCOUNT_CONFLICT' | 'DUPLICATE_KEY';
-    /**
-     * A short, human-readable summary of the problem
-     */
-    title: string;
-    /**
-     * A human-readable explanation specific to this occurrence
-     */
-    detail: string;
-    /**
-     * A URI reference that identifies the problem type (`about:blank` when the problem has no further semantics beyond the HTTP status, per RFC 9457)
-     */
-    type?: string;
-    /**
-     * A URI reference that identifies the specific occurrence (e.g., trace ID)
-     */
-    instance?: string;
-    /**
-     * The HTTP status code
-     */
-    status: 409;
-    /**
-     * Optional map of field names to their error messages (for validation errors)
-     */
-    errors?: {
-        [key: string]: string;
-    };
-};
-
-/**
- * Not Found error response
- */
-export type Error404 = {
-    /**
-     * Specific error code for programmatic handling
-     */
-    code: 'NOT_FOUND';
-    /**
-     * A short, human-readable summary of the problem
-     */
-    title: string;
-    /**
-     * A human-readable explanation specific to this occurrence
-     */
-    detail: string;
-    /**
-     * A URI reference that identifies the problem type (`about:blank` when the problem has no further semantics beyond the HTTP status, per RFC 9457)
-     */
-    type?: string;
-    /**
-     * A URI reference that identifies the specific occurrence (e.g., trace ID)
-     */
-    instance?: string;
-    /**
-     * The HTTP status code
-     */
-    status: 404;
-    /**
-     * Optional map of field names to their error messages (for validation errors)
-     */
-    errors?: {
-        [key: string]: string;
-    };
 };
 
 /**
@@ -1783,9 +2157,10 @@ export type UserMe = {
          */
         periodEnd: string;
         /**
-         * The quota tier this account sits on. Null when the account is on none,
-         * or when an override is in force and the tier no longer describes the
-         * limit.
+         * The quota tier that sets this account's limit: the assigned tier, or
+         * the one a linked Patreon membership earns when that is higher. Null
+         * when the account is on none, or when an override is in force and no
+         * tier describes the limit.
          *
          */
         tier: {
@@ -1823,55 +2198,6 @@ export type UserMe = {
  */
 export type ApiKeyScope = 'ADD_MEDIA' | 'READ_MEDIA' | 'UPDATE_MEDIA' | 'REMOVE_MEDIA' | 'READ_PROFILE' | 'WRITE_PROFILE' | 'READ_ACTIVITY' | 'WRITE_ACTIVITY' | 'READ_COLLECTIONS' | 'CREATE_COLLECTIONS' | 'UPDATE_COLLECTIONS' | 'DELETE_COLLECTIONS' | 'READ_ADMIN';
 
-/**
- * A reader's linked Shirabe account, as the reader is shown it.
- *
- * Never carries the stored tokens: nothing here can be used to act on their
- * Shirabe account.
- *
- */
-export type ShirabeConnection = {
-    /**
-     * True when the link works but is missing a permission a newer feature needs -- granted before that feature existed. A re-consent, not a repair: what the account was linked for keeps working the whole time, and only the newer feature is unavailable.
-     */
-    needsUpgrade: boolean;
-    /**
-     * The permissions a re-consent would add. Empty unless `needsUpgrade`.
-     */
-    missingScopes: Array<string>;
-    /**
-     * True when Shirabe refused this key outright -- the reader revoked it from their Shirabe access list, or it was swept for being idle. The link is over until they make a new one, and their own dictionaries are not being used until they do. Distinct from `needsUpgrade`, which is a link that still works: this one is a repair.
-     */
-    disconnected: boolean;
-    linkedAt: string;
-    /**
-     * Who they are on Shirabe, for the settings page to name the link.
-     */
-    shirabeName?: string;
-    /**
-     * What the reader granted. Today that is READ_ACCOUNT and nothing else.
-     */
-    scopes: Array<string>;
-    /**
-     * Their Shirabe dictionary stack: ordered `slug:lang` refs naming which dictionaries resolve, in which languages, in what order. This is what makes a word lookup here answer the way it does over there.
-     */
-    dictionaries: Array<string>;
-    /**
-     * What each dictionary above is CALLED, keyed by slug, as Shirabe names it. A reader's own uploads are filed under content hashes, so a client printing the stack without this prints a list of hashes. Empty for a link made before Shirabe published the names; fall back to the slug.
-     */
-    dictionaryNames?: {
-        [key: string]: string;
-    };
-    /**
-     * True when their stack names one of their own uploads, which makes its answers theirs alone and stops a lookup being cached for anyone else.
-     */
-    stackIsPrivate: boolean;
-    /**
-     * When the stack was last re-read from Shirabe.
-     */
-    syncedAt?: string;
-};
-
 export type PatreonConnection = {
     linked: true;
     fullName: string | null;
@@ -1880,6 +2206,148 @@ export type PatreonConnection = {
     entitledAmountCents: number;
     membershipCheckedAt: string;
     linkedAt: string;
+};
+
+/**
+ * Provider-agnostic anime tracker connection, catalog coverage, and resolved search filter entries.
+ */
+export type TrackerState = {
+    configuredProviders: Array<'ANILIST' | 'MAL'>;
+    canUsePatronPerks: boolean;
+    connection: {
+        provider: 'ANILIST' | 'MAL';
+        externalUsername: string | null;
+        supportsCustomLists: boolean;
+        lastSyncedAt: string | null;
+        lastSyncError: string | null;
+        linkedAt: string;
+        settings: {
+            autoSyncEnabled: boolean;
+            spoilerGuardEnabled: boolean;
+            hidePlanToWatch: boolean;
+        };
+        effectiveSettings: {
+            autoSyncEnabled: boolean;
+            spoilerGuardEnabled: boolean;
+            hidePlanToWatch: boolean;
+        };
+        nextManualSyncAt: string | null;
+        manualCooldownSeconds: number;
+    } | null;
+    coverage: {
+        total: number;
+        inCatalog: number;
+        missing: number;
+        byStatus: {
+            WATCHING: number;
+            COMPLETED: number;
+            PAUSED: number;
+            DROPPED: number;
+            PLANNING: number;
+        };
+    } | null;
+    customLists: Array<string>;
+    customListCount: number;
+    entries: Array<{
+        mediaPublicId: string;
+        title: string;
+        status: 'WATCHING' | 'COMPLETED' | 'PAUSED' | 'DROPPED' | 'PLANNING';
+        progress: number;
+        customLists: Array<string>;
+    }>;
+    missingAnime: Array<{
+        externalSource: 'ANILIST' | 'MAL';
+        externalId: string;
+        title: string;
+        status: 'WATCHING' | 'COMPLETED' | 'PAUSED' | 'DROPPED' | 'PLANNING';
+        sourceUrl: string;
+        /**
+         * The content request already filed for this title (active or declined), or null.
+         */
+        request: {
+            publicId: string;
+            status: 'OPEN' | 'PLANNED' | 'IN_PROGRESS' | 'DECLINED';
+            voteCount: number;
+            /**
+             * The reader already voted for it (filing counts as a vote).
+             */
+            voted: boolean;
+        } | null;
+    }>;
+};
+
+/**
+ * One custom Yomitan dictionary attached to the user's account.
+ */
+export type UserDictionary = {
+    id: number;
+    stackId: string;
+    title: string;
+    revision: string;
+    author: string;
+    description: string;
+    url: string;
+    frequencyMode: string;
+    hasTerms: boolean;
+    hasFrequency: boolean;
+    hasPitch: boolean;
+    termCount: number;
+    frequencyCount: number;
+    pitchCount: number;
+    zipBytes: number;
+    sqliteBytes: number;
+    status: 'processing' | 'ready' | 'failed';
+    errorMessage: string;
+    enabled: boolean;
+    sortOrder: number;
+    createdAt: string;
+    /**
+     * How far a running import got, 0-100; null when it is queued, ready or failed.
+     */
+    progress: number;
+    /**
+     * Place in the import queue while waiting to start (1 = next); null once it runs or is done.
+     */
+    queuePosition: number;
+};
+
+/**
+ * The signed-in user's custom Yomitan dictionary stack, built-in JMdict placement, and account quota.
+ */
+export type UserDictionaryListResponse = {
+    dictionaries: Array<UserDictionary>;
+    builtin: {
+        id: string;
+        enabled: boolean;
+        position: number;
+    };
+    quota: {
+        used: number;
+        max: number;
+        maxZipBytes: number;
+        isPatron: boolean;
+        /**
+         * Disk the account's dictionaries take once indexed, in bytes.
+         */
+        indexedBytesUsed: number;
+        /**
+         * Indexed space the account may use, in bytes; new uploads are refused once it is used up.
+         */
+        maxIndexedBytes: number;
+    };
+    stackFingerprint: string;
+    /**
+     * Whether uploads go straight to storage (reserve, PUT, complete) rather than through the upload endpoint.
+     */
+    directUpload: boolean;
+};
+
+/**
+ * The dictionary an upload created or attached, and the account's new stack fingerprint.
+ */
+export type UserDictionaryUploadResult = {
+    dictionary: UserDictionary;
+    stackFingerprint: string;
 };
 
 export type ReportTargetMedia = {
@@ -2233,7 +2701,46 @@ export type UserPreferences = {
          *
          */
         updates?: boolean;
+        /**
+         * News on the content requests the reader voted for or boosted: work
+         * started, title released. Absent means follow `enabled`.
+         *
+         */
+        requests?: boolean;
+        /**
+         * Word alerts by email: a watched word first appearing, and the weekly
+         * digest of new sentences for followed words. Absent means follow
+         * `enabled`.
+         *
+         */
+        words?: boolean;
     };
+    /**
+     * The site channel of the notification centre (the bell), per category.
+     * Absent means on. Email has its own switches in `productEmails`.
+     *
+     */
+    siteNotifications?: {
+        words?: boolean;
+        requests?: boolean;
+    };
+    /**
+     * A patron's custom theme: a light or dark base plus an accent and a page
+     * background. Writing a non-null value needs an active Patreon membership
+     * (any paid tier) or an admin account; `null` clears it. Kept when a
+     * membership lapses, but left out of the response until it is active again,
+     * so the site falls back to the dark theme.
+     *
+     */
+    customTheme?: {
+        /**
+         * The ready-made theme it started from, or `custom`.
+         */
+        preset?: 'sepia' | 'indigo' | 'midnight' | 'matcha' | 'ocean' | 'sunset' | 'lavender' | 'custom';
+        base: 'dark' | 'light';
+        accent: string;
+        background: string;
+    } | null;
 };
 
 /**
@@ -2508,6 +3015,51 @@ export type UpdateCollectionSegmentRequest = {
     position?: number;
 };
 
+export type AdminOverview = {
+    reports: {
+        /**
+         * Reports currently open and waiting for review.
+         */
+        open: number;
+    };
+    requests: {
+        /**
+         * Content requests waiting in OPEN status.
+         */
+        open: number;
+        /**
+         * Open content requests that have at least one patron boost.
+         */
+        boostedOpen: number;
+    };
+    users: {
+        /**
+         * Active (non-deleted) user accounts.
+         */
+        total: number;
+        /**
+         * Linked Patreon accounts with an active paid membership.
+         */
+        activePatrons: number;
+    };
+    announcement: {
+        /**
+         * Whether a site-wide announcement banner is currently enabled.
+         */
+        active: boolean;
+    };
+    emails: {
+        /**
+         * Sends that failed in the last 24 hours.
+         */
+        failed: number;
+        /**
+         * Bounces and complaints reported in the last 24 hours.
+         */
+        bounced: number;
+    };
+};
+
 /**
  * Kind of entity a report is about
  */
@@ -2659,57 +3211,6 @@ export type UpdateReportRequest = {
     adminNotes?: string;
 };
 
-export type AgentActivityResponse = {
-    entries: Array<{
-        /**
-         * Revision ID
-         */
-        revisionId: number;
-        /**
-         * The revision number to pass to the restore endpoint to undo this edit
-         */
-        revisionNumber: number;
-        /**
-         * Public ID of the segment that was changed
-         */
-        segmentPublicId: string;
-        /**
-         * Public ID of the media the segment belongs to
-         */
-        mediaPublicId: string;
-        /**
-         * Episode the segment belongs to
-         */
-        episodeNumber: number;
-        /**
-         * The segment's editable fields as they were before this edit
-         */
-        snapshot: {
-            [key: string]: unknown;
-        };
-        /**
-         * The same fields as they are now. Paired with `snapshot` this is the
-         * diff, without the caller having to fetch the segment separately.
-         *
-         */
-        current: {
-            [key: string]: unknown;
-        };
-        /**
-         * The report this edit answered, when it answered one
-         */
-        reportId: number;
-        /**
-         * Account the service credential belongs to
-         */
-        actedBy: string;
-        /**
-         * When the edit was made
-         */
-        createdAt: string;
-    }>;
-};
-
 /**
  * Site-wide announcement banner
  */
@@ -2787,6 +3288,13 @@ export type Tier = {
      */
     rateLimitWindowMs?: number;
     /**
+     * The Patreon tier whose members earn this tier, matched against the
+     * member's entitled tiers. Null when Patreon never grants it and only an
+     * assignment reaches it.
+     *
+     */
+    patreonTierId?: string;
+    /**
      * Display order; the id is a slug, not a rank
      */
     sortOrder: number;
@@ -2795,9 +3303,16 @@ export type Tier = {
 export type AccountQuotaState = {
     userId: number;
     /**
-     * The tier this account sits on, or null if it has none
+     * The tier this account is assigned, or null if it has none
      */
     tierId: string;
+    /**
+     * The tier that produced `monthlyQuotaLimit`: the assigned tier, or the one
+     * a Patreon membership earns when that is higher. Null when an override or
+     * a fallback decided the limit.
+     *
+     */
+    effectiveTierId: string;
     /**
      * Per-account limit that wins over the tier when set
      */
@@ -2808,11 +3323,14 @@ export type AccountQuotaState = {
     monthlyQuotaLimit: number;
     /**
      * Which step of the resolution order produced `monthlyQuotaLimit`.
+     * `patreon` means a linked, active and recently checked Patreon membership
+     * earns a higher tier than the assigned one; it is computed, never stored,
+     * so it ends on its own when the membership does.
      * `legacy_column` and `default` mean the tier did not resolve, and are worth
      * investigating rather than displaying.
      *
      */
-    quotaSource: 'override' | 'tier' | 'legacy_column' | 'default';
+    quotaSource: 'override' | 'tier' | 'patreon' | 'legacy_column' | 'default';
     /**
      * Calls billed to this account in the current period
      */
@@ -2847,27 +3365,238 @@ export type UpdateAccountQuotaRequest = {
     reason?: string;
 };
 
-export type RoadmapItemWrite = {
-    kind: 'CONTENT' | 'FEATURE';
-    status: 'CONSIDERING' | 'PLANNED' | 'IN_PROGRESS' | 'RELEASED';
-    title: string;
-    description?: string;
-    sourceUrl?: string | null;
-    coverUrl?: string | null;
-    targetDate?: string | null;
-    introducedInVersion?: string | null;
-    sortOrder?: number;
-    proposerName?: string | null;
+export type AdminContentRequest = ContentRequest & {
+    externalSource: 'ANILIST' | 'MAL' | 'IMDB' | 'TVDB' | 'TMDB' | 'YOUTUBE' | 'ASIN' | null;
+    externalId: string | null;
+    requester: {
+        id: number;
+        username: string;
+    } | null;
+    /**
+     * An active request with the same title, flagged for review; never merged automatically.
+     */
+    possibleDuplicateOf: {
+        id: string;
+        title: string;
+        status: 'OPEN' | 'PLANNED' | 'IN_PROGRESS' | 'RELEASED' | 'DECLINED';
+    } | null;
 };
 
-export type ListRoadmapData = {
+export type AdminPatreonCampaignMember = {
+    memberId: string;
+    patreonUserId: string;
+    fullName: string;
+    email: string;
+    patronStatus: string;
+    entitledAmountCents: number;
+    /**
+     * Normalized monthly USD cents using the Patreon tier list price when assigned (excludes Apple iOS IAP markup).
+     */
+    monthlyAmountCents: number;
+    lifetimeSupportCents: number;
+    pledgeStart: string;
+    lastChargeStatus: string;
+    lastChargeDate: string;
+    entitledTierIds: Array<string>;
+    patreonTierTitles: Array<string>;
+    resolvedTierName: string;
+    unmatchedTierIds: Array<string>;
+    linkedUserId: number;
+    linkedUsername: string;
+    /**
+     * Existing Nadeshiko user matched by lowercase email when the patron has not linked Patreon OAuth yet.
+     */
+    matchedUserId: number;
+    matchedUsername: string;
+};
+
+export type AdminPatreonConnection = {
+    userId: number;
+    username: string;
+    email: string;
+    patreonUserId: string;
+    fullName: string;
+    patronStatus: string;
+    /**
+     * Monthly USD cents, normalized to the Patreon tier list price when the member appears in the live campaign list (excludes Apple iOS IAP markup); otherwise Patreon's raw entitled amount.
+     */
+    monthlyAmountCents: number;
+    resolvedTierId: string;
+    resolvedTierName: string;
+    effectiveQuotaLimit: number;
+    quotaSource: 'override' | 'tier' | 'patreon' | 'legacy_column' | 'default';
+    /**
+     * Entitled Patreon tier IDs that match no configured Tier row.
+     */
+    unmatchedTierIds: Array<string>;
+    /**
+     * True when active_patron with positive pledge and checked within the staleness bound.
+     */
+    isActive: boolean;
+    /**
+     * True when membershipCheckedAt is older than the 7-day staleness bound.
+     */
+    isStale: boolean;
+    /**
+     * True when stale, declined, or carrying unmatched Patreon tier IDs.
+     */
+    hasIssue: boolean;
+    membershipCheckedAt: string;
+    linkedAt: string;
+};
+
+export type AdminPatreonOverview = {
+    /**
+     * Whether Patreon OAuth credentials and campaign ID are configured on this server.
+     */
+    configured: boolean;
+    /**
+     * Configured Patreon campaign ID, if set.
+     */
+    campaignId: string;
+    summary: {
+        totalLinked: number;
+        active: number;
+        issues: number;
+        campaignActive: number;
+        campaignUnlinkedActive: number;
+        /**
+         * Gross monthly pledge total in campaign currency cents across active Patreon campaign members.
+         */
+        campaignMonthlyCents: number;
+        /**
+         * Gross all-time support total in campaign currency cents across all Patreon campaign members.
+         */
+        campaignLifetimeCents: number;
+        /**
+         * Count of campaign members with non-zero historical or active support.
+         */
+        campaignPayingEver: number;
+    };
+    campaign: {
+        status: 'ok' | 'unconfigured' | 'unauthorized' | 'error';
+        errorMessage: string;
+        fetchedAt: string;
+        members: Array<AdminPatreonCampaignMember>;
+    };
+    tiers: Array<{
+        id: string;
+        displayName: string;
+        patreonTierId: string;
+        monthlyQuotaLimit: number;
+        monthlyRequestBoosts: number;
+        /**
+         * Count of active linked Nadeshiko OAuth connections resolved to this tier.
+         */
+        activePatronCount: number;
+        /**
+         * Count of active Patreon.com campaign members resolved to this tier.
+         */
+        campaignPatronCount: number;
+        /**
+         * Normalized monthly USD cents from active Patreon.com campaign members in this tier.
+         */
+        campaignMonthlyCents: number;
+    }>;
+    connections: Array<AdminPatreonConnection>;
+    manualGrants: Array<{
+        userId: number;
+        username: string;
+        email: string;
+        tierId: string;
+        tierName: string;
+        quotaOverride: number;
+        effectiveQuotaLimit: number;
+        quotaSource: 'override' | 'tier' | 'patreon' | 'legacy_column' | 'default';
+    }>;
+};
+
+/**
+ * One email the site sent, tried to send, or refused to send.
+ */
+export type AdminEmailSend = {
+    id: number;
+    sentAt: string;
+    address: string;
+    userId: number;
+    /**
+     * The account's username when the send is tied to one.
+     */
+    username: string;
+    kind: string;
+    campaign: string;
+    /**
+     * Null on rows rebuilt from older tables that never stored it.
+     */
+    subject: string;
+    /**
+     * `failed` and `suppressed` never left. A message that left is `sent` until SES reports it
+     * `delivered`, `bounced` or `complained`.
+     *
+     */
+    status: 'sent' | 'delivered' | 'bounced' | 'complained' | 'failed' | 'suppressed';
+    /**
+     * Why sending failed.
+     */
+    error: string;
+    sesMessageId: string;
+    /**
+     * `backfill` rows were rebuilt from older tables when the log started.
+     */
+    source: 'live' | 'backfill';
+    /**
+     * Whether the admin view can send this again (sign-in links, and welcomes tied to an account).
+     */
+    resendable: boolean;
+};
+
+/**
+ * One event SES reported for a message.
+ */
+export type AdminEmailEvent = {
+    id: number;
+    event: string;
+    occurredAt: string;
+    reason: string;
+    diagnosticMessage: string;
+};
+
+export type AdminEmailSuppression = {
+    address: string;
+    cause: 'hard_bounce' | 'complaint' | 'repeated_soft_bounce' | 'manual';
+    reason: string;
+    suppressedAt: string;
+    /**
+     * Complaints are never lifted from the dashboard.
+     */
+    permanent: boolean;
+};
+
+export type ListContentRequestsData = {
     body?: never;
     path?: never;
-    query?: never;
-    url: '/v1/roadmap';
+    query?: {
+        /**
+         * ACTIVE (open or planned), IN_PROGRESS, RELEASED or DECLINED.
+         */
+        status?: 'ACTIVE' | 'IN_PROGRESS' | 'RELEASED' | 'DECLINED';
+        category?: 'ANIME' | 'JDRAMA' | 'YOUTUBE' | 'AUDIOBOOK';
+        sort?: 'TOP' | 'RECENT';
+        /**
+         * Case-insensitive title filter.
+         */
+        q?: string;
+        page?: number;
+        take?: number;
+    };
+    url: '/v1/requests';
 };
 
-export type ListRoadmapErrors = {
+export type ListContentRequestsErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
     /**
      * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
      */
@@ -2878,36 +3607,35 @@ export type ListRoadmapErrors = {
     500: Error500;
 };
 
-export type ListRoadmapError = ListRoadmapErrors[keyof ListRoadmapErrors];
+export type ListContentRequestsError = ListContentRequestsErrors[keyof ListContentRequestsErrors];
 
-export type ListRoadmapResponses = {
+export type ListContentRequestsResponses = {
     /**
      * OK
      */
     200: {
-        items: Array<RoadmapItem>;
-        patreonUrl: string;
+        items: Array<ContentRequest>;
+        total: number;
     };
 };
 
-export type ListRoadmapResponse = ListRoadmapResponses[keyof ListRoadmapResponses];
+export type ListContentRequestsResponse = ListContentRequestsResponses[keyof ListContentRequestsResponses];
 
-export type CreateRoadmapProposalData = {
+export type CreateContentRequestData = {
     body: {
         sourceUrl: string;
+        /**
+         * Used when the link gives no title.
+         */
         title?: string;
         note?: string;
-        /**
-         * Optional name to show publicly if the proposal is approved.
-         */
-        proposerName?: string;
     };
     path?: never;
     query?: never;
-    url: '/v1/roadmap/proposals';
+    url: '/v1/requests';
 };
 
-export type CreateRoadmapProposalErrors = {
+export type CreateContentRequestErrors = {
     /**
      * Bad Request
      */
@@ -2930,16 +3658,690 @@ export type CreateRoadmapProposalErrors = {
     500: Error500;
 };
 
-export type CreateRoadmapProposalError = CreateRoadmapProposalErrors[keyof CreateRoadmapProposalErrors];
+export type CreateContentRequestError = CreateContentRequestErrors[keyof CreateContentRequestErrors];
 
-export type CreateRoadmapProposalResponses = {
+export type CreateContentRequestResponses = {
     /**
-     * Submitted for review
+     * The title was already requested; the reader's vote was added to that request.
      */
-    201: RoadmapItem;
+    200: {
+        request: ContentRequest;
+        outcome: 'voted' | 'already_voted';
+    };
+    /**
+     * Created
+     */
+    201: {
+        request: ContentRequest;
+        outcome: 'created';
+    };
 };
 
-export type CreateRoadmapProposalResponse = CreateRoadmapProposalResponses[keyof CreateRoadmapProposalResponses];
+export type CreateContentRequestResponse = CreateContentRequestResponses[keyof CreateContentRequestResponses];
+
+export type GetContentRequestAllowanceData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/v1/requests/me';
+};
+
+export type GetContentRequestAllowanceErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type GetContentRequestAllowanceError = GetContentRequestAllowanceErrors[keyof GetContentRequestAllowanceErrors];
+
+export type GetContentRequestAllowanceResponses = {
+    /**
+     * OK
+     */
+    200: {
+        isPatron: boolean;
+        openCount: number;
+        /**
+         * Null for admins (no limit).
+         */
+        openLimit: number | null;
+        /**
+         * Total requests filed by this reader across all statuses.
+         */
+        ownCount: number;
+        /**
+         * Total requests this reader voted for or boosted across all statuses.
+         */
+        votedCount: number;
+        boosts: {
+            perMonth: number;
+            used: number;
+            remaining: number;
+            resetsAt: string;
+        };
+        votedIds: Array<string>;
+        boostedIds: Array<string>;
+        /**
+         * Active requests this reader filed.
+         */
+        ownIds: Array<string>;
+    };
+};
+
+export type GetContentRequestAllowanceResponse = GetContentRequestAllowanceResponses[keyof GetContentRequestAllowanceResponses];
+
+export type ListMyContentRequestsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * OWN (requests filed by the signed-in reader) or VOTED (requests they voted for or boosted).
+         */
+        scope?: 'OWN' | 'VOTED';
+        /**
+         * ALL (every status), ACTIVE (open or planned), IN_PROGRESS, RELEASED or DECLINED.
+         */
+        status?: 'ALL' | 'ACTIVE' | 'IN_PROGRESS' | 'RELEASED' | 'DECLINED';
+        category?: 'ANIME' | 'JDRAMA' | 'YOUTUBE' | 'AUDIOBOOK';
+        sort?: 'TOP' | 'RECENT';
+        /**
+         * Case-insensitive title filter.
+         */
+        q?: string;
+        page?: number;
+        take?: number;
+    };
+    url: '/v1/requests/mine';
+};
+
+export type ListMyContentRequestsErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type ListMyContentRequestsError = ListMyContentRequestsErrors[keyof ListMyContentRequestsErrors];
+
+export type ListMyContentRequestsResponses = {
+    /**
+     * OK
+     */
+    200: {
+        items: Array<ContentRequest>;
+        total: number;
+    };
+};
+
+export type ListMyContentRequestsResponse = ListMyContentRequestsResponses[keyof ListMyContentRequestsResponses];
+
+export type WithdrawContentRequestData = {
+    body?: never;
+    path: {
+        /**
+         * Public UUID of the request.
+         */
+        requestId: string;
+    };
+    query?: never;
+    url: '/v1/requests/{requestId}';
+};
+
+export type WithdrawContentRequestErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Not Found
+     */
+    404: Error404;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type WithdrawContentRequestError = WithdrawContentRequestErrors[keyof WithdrawContentRequestErrors];
+
+export type WithdrawContentRequestResponses = {
+    /**
+     * Withdrawn
+     */
+    204: void;
+};
+
+export type WithdrawContentRequestResponse = WithdrawContentRequestResponses[keyof WithdrawContentRequestResponses];
+
+export type UnvoteContentRequestData = {
+    body?: never;
+    path: {
+        /**
+         * Public UUID of the request.
+         */
+        requestId: string;
+    };
+    query?: never;
+    url: '/v1/requests/{requestId}/vote';
+};
+
+export type UnvoteContentRequestErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Not Found
+     */
+    404: Error404;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type UnvoteContentRequestError = UnvoteContentRequestErrors[keyof UnvoteContentRequestErrors];
+
+export type UnvoteContentRequestResponses = {
+    /**
+     * OK
+     */
+    200: ContentRequest;
+};
+
+export type UnvoteContentRequestResponse = UnvoteContentRequestResponses[keyof UnvoteContentRequestResponses];
+
+export type VoteContentRequestData = {
+    body?: never;
+    path: {
+        /**
+         * Public UUID of the request.
+         */
+        requestId: string;
+    };
+    query?: never;
+    url: '/v1/requests/{requestId}/vote';
+};
+
+export type VoteContentRequestErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Not Found
+     */
+    404: Error404;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type VoteContentRequestError = VoteContentRequestErrors[keyof VoteContentRequestErrors];
+
+export type VoteContentRequestResponses = {
+    /**
+     * OK
+     */
+    200: ContentRequest;
+};
+
+export type VoteContentRequestResponse = VoteContentRequestResponses[keyof VoteContentRequestResponses];
+
+export type BoostContentRequestData = {
+    body?: never;
+    path: {
+        /**
+         * Public UUID of the request.
+         */
+        requestId: string;
+    };
+    query?: never;
+    url: '/v1/requests/{requestId}/boost';
+};
+
+export type BoostContentRequestErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Not Found
+     */
+    404: Error404;
+    /**
+     * Conflict
+     */
+    409: Error409;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type BoostContentRequestError = BoostContentRequestErrors[keyof BoostContentRequestErrors];
+
+export type BoostContentRequestResponses = {
+    /**
+     * OK
+     */
+    200: ContentRequest;
+};
+
+export type BoostContentRequestResponse = BoostContentRequestResponses[keyof BoostContentRequestResponses];
+
+export type ListNotificationsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        take?: number;
+        /**
+         * Only entries created before this instant (the `createdAt` of the last entry of the previous page).
+         */
+        before?: string;
+    };
+    url: '/v1/notifications';
+};
+
+export type ListNotificationsErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type ListNotificationsError = ListNotificationsErrors[keyof ListNotificationsErrors];
+
+export type ListNotificationsResponses = {
+    /**
+     * OK
+     */
+    200: {
+        items: Array<Notification>;
+        unreadCount: number;
+        hasMore: boolean;
+    };
+};
+
+export type ListNotificationsResponse = ListNotificationsResponses[keyof ListNotificationsResponses];
+
+export type GetUnreadNotificationCountData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/v1/notifications/unread-count';
+};
+
+export type GetUnreadNotificationCountErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type GetUnreadNotificationCountError = GetUnreadNotificationCountErrors[keyof GetUnreadNotificationCountErrors];
+
+export type GetUnreadNotificationCountResponses = {
+    /**
+     * OK
+     */
+    200: {
+        count: number;
+    };
+};
+
+export type GetUnreadNotificationCountResponse = GetUnreadNotificationCountResponses[keyof GetUnreadNotificationCountResponses];
+
+export type MarkNotificationsReadData = {
+    body: {
+        ids?: Array<string>;
+    };
+    path?: never;
+    query?: never;
+    url: '/v1/notifications/read';
+};
+
+export type MarkNotificationsReadErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type MarkNotificationsReadError = MarkNotificationsReadErrors[keyof MarkNotificationsReadErrors];
+
+export type MarkNotificationsReadResponses = {
+    /**
+     * OK
+     */
+    200: {
+        unreadCount: number;
+    };
+};
+
+export type MarkNotificationsReadResponse = MarkNotificationsReadResponses[keyof MarkNotificationsReadResponses];
+
+export type ListWordWatchesData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/v1/word-watches';
+};
+
+export type ListWordWatchesErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type ListWordWatchesError = ListWordWatchesErrors[keyof ListWordWatchesErrors];
+
+export type ListWordWatchesResponses = {
+    /**
+     * OK
+     */
+    200: {
+        items: Array<WordWatch>;
+        activeCount: number;
+        /**
+         * Active alerts this reader may have (more for patrons).
+         */
+        limit: number;
+    };
+};
+
+export type ListWordWatchesResponse = ListWordWatchesResponses[keyof ListWordWatchesResponses];
+
+export type SetWordWatchData = {
+    body: {
+        query: string;
+        matchMode?: 'WORD' | 'EXACT' | 'CONTAINS';
+        mode: 'FIRST' | 'NEW_SENTENCES';
+    };
+    path?: never;
+    query?: never;
+    url: '/v1/word-watches';
+};
+
+export type SetWordWatchErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+    /**
+     * Service Unavailable. The server is already running as many requests of this kind as it can and refused this one rather than queue it. Nothing about the caller was counted -- this is not a rate limit -- so there is no budget to stay inside; wait the number of seconds in the `Retry-After` header and send the same request again.
+     */
+    503: Error503;
+};
+
+export type SetWordWatchError = SetWordWatchErrors[keyof SetWordWatchErrors];
+
+export type SetWordWatchResponses = {
+    /**
+     * An existing alert was switched
+     */
+    200: WordWatchSetResponse;
+    /**
+     * Created
+     */
+    201: WordWatchSetResponse;
+};
+
+export type SetWordWatchResponse = SetWordWatchResponses[keyof SetWordWatchResponses];
+
+export type CheckWordWatchData = {
+    body?: never;
+    path?: never;
+    query: {
+        query: string;
+        matchMode?: 'WORD' | 'EXACT' | 'CONTAINS';
+    };
+    url: '/v1/word-watches/check';
+};
+
+export type CheckWordWatchErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type CheckWordWatchError = CheckWordWatchErrors[keyof CheckWordWatchErrors];
+
+export type CheckWordWatchResponses = {
+    /**
+     * OK
+     */
+    200: {
+        watch: WordWatch | null;
+    };
+};
+
+export type CheckWordWatchResponse = CheckWordWatchResponses[keyof CheckWordWatchResponses];
+
+export type DeleteWordWatchData = {
+    body?: never;
+    path: {
+        watchId: string;
+    };
+    query?: never;
+    url: '/v1/word-watches/{watchId}';
+};
+
+export type DeleteWordWatchErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Not Found
+     */
+    404: Error404;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type DeleteWordWatchError = DeleteWordWatchErrors[keyof DeleteWordWatchErrors];
+
+export type DeleteWordWatchResponses = {
+    /**
+     * Removed
+     */
+    204: void;
+};
+
+export type DeleteWordWatchResponse = DeleteWordWatchResponses[keyof DeleteWordWatchResponses];
+
+export type UpdateWordWatchData = {
+    body: {
+        mode?: 'FIRST' | 'NEW_SENTENCES';
+        paused?: boolean;
+    };
+    path: {
+        watchId: string;
+    };
+    query?: never;
+    url: '/v1/word-watches/{watchId}';
+};
+
+export type UpdateWordWatchErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Not Found
+     */
+    404: Error404;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+    /**
+     * Service Unavailable. The server is already running as many requests of this kind as it can and refused this one rather than queue it. Nothing about the caller was counted -- this is not a rate limit -- so there is no budget to stay inside; wait the number of seconds in the `Retry-After` header and send the same request again.
+     */
+    503: Error503;
+};
+
+export type UpdateWordWatchError = UpdateWordWatchErrors[keyof UpdateWordWatchErrors];
+
+export type UpdateWordWatchResponses = {
+    /**
+     * OK
+     */
+    200: WordWatch;
+};
+
+export type UpdateWordWatchResponse = UpdateWordWatchResponses[keyof UpdateWordWatchResponses];
 
 export type SearchData = {
     body: SearchRequest;
@@ -3112,6 +4514,182 @@ export type SearchMediaResponses = {
 };
 
 export type SearchMediaResponse = SearchMediaResponses[keyof SearchMediaResponses];
+
+export type IdentifyDictionaryWordData = {
+    body?: never;
+    path?: never;
+    query: {
+        /**
+         * The token's dictionary form.
+         */
+        lemma: string;
+        /**
+         * The token as written in the sentence.
+         */
+        surface?: string;
+        /**
+         * The surface's reading, in katakana or hiragana.
+         */
+        reading?: string;
+        /**
+         * The token's short part-of-speech tag (`SlimToken.pt`).
+         */
+        pos?: string;
+        /**
+         * Language whose senses come first.
+         */
+        locale?: 'en' | 'es';
+    };
+    url: '/v1/dictionary/identify';
+};
+
+export type IdentifyDictionaryWordErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type IdentifyDictionaryWordError = IdentifyDictionaryWordErrors[keyof IdentifyDictionaryWordErrors];
+
+export type IdentifyDictionaryWordResponses = {
+    /**
+     * OK
+     */
+    200: {
+        /**
+         * Best first; empty when no entry matches.
+         */
+        candidates: Array<DictionaryCandidate>;
+        /**
+         * Fingerprint of the reader's custom dictionary stack when custom dictionaries were applied.
+         */
+        stackFingerprint?: string;
+        /**
+         * True when the answer lacks one of the reader's enabled custom dictionaries, because it is still indexing or this server is still fetching it. Such an answer must not be cached.
+         */
+        customDictionariesPending?: boolean;
+    };
+};
+
+export type IdentifyDictionaryWordResponse = IdentifyDictionaryWordResponses[keyof IdentifyDictionaryWordResponses];
+
+export type GetDictionaryKanjiIndexData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Language of the meanings; English where there is none in it.
+         */
+        locale?: 'en' | 'es';
+    };
+    url: '/v1/dictionary/kanji';
+};
+
+export type GetDictionaryKanjiIndexErrors = {
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type GetDictionaryKanjiIndexError = GetDictionaryKanjiIndexErrors[keyof GetDictionaryKanjiIndexErrors];
+
+export type GetDictionaryKanjiIndexResponses = {
+    /**
+     * OK
+     */
+    200: {
+        /**
+         * School kanji first by grade, then by newspaper frequency.
+         */
+        kanji: Array<{
+            character: string;
+            grade: number;
+            jlpt: number;
+            frequency: number;
+            reading: string;
+            meaning: string;
+        }>;
+    };
+};
+
+export type GetDictionaryKanjiIndexResponse = GetDictionaryKanjiIndexResponses[keyof GetDictionaryKanjiIndexResponses];
+
+export type GetDictionaryKanjiData = {
+    body?: never;
+    path: {
+        /**
+         * The kanji, one character (two UTF-16 units outside the BMP).
+         */
+        character: string;
+    };
+    query?: {
+        /**
+         * Language of the meanings and word glosses; English where there are none in it.
+         */
+        locale?: 'en' | 'es';
+        /**
+         * How many related kanji to list; `all` for the kanji's own page, `short` (the first 12) for the word card.
+         */
+        related?: 'short' | 'all';
+    };
+    url: '/v1/dictionary/kanji/{character}';
+};
+
+export type GetDictionaryKanjiErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Not Found
+     */
+    404: Error404;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type GetDictionaryKanjiError = GetDictionaryKanjiErrors[keyof GetDictionaryKanjiErrors];
+
+export type GetDictionaryKanjiResponses = {
+    /**
+     * OK
+     */
+    200: DictionaryKanji;
+};
+
+export type GetDictionaryKanjiResponse = GetDictionaryKanjiResponses[keyof GetDictionaryKanjiResponses];
 
 export type GetStatsOverviewData = {
     body?: never;
@@ -4396,302 +5974,6 @@ export type CreateUserApiKeyResponses = {
 
 export type CreateUserApiKeyResponse = CreateUserApiKeyResponses[keyof CreateUserApiKeyResponses];
 
-export type UnlinkShirabeData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/v1/user/connections/shirabe';
-};
-
-export type UnlinkShirabeErrors = {
-    /**
-     * Unauthorized
-     */
-    401: Error401;
-    /**
-     * Not Found
-     */
-    404: Error404;
-    /**
-     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
-     */
-    429: Error429;
-    /**
-     * Internal Server Error
-     */
-    500: Error500;
-};
-
-export type UnlinkShirabeError = UnlinkShirabeErrors[keyof UnlinkShirabeErrors];
-
-export type UnlinkShirabeResponses = {
-    /**
-     * No Content
-     */
-    204: void;
-};
-
-export type UnlinkShirabeResponse = UnlinkShirabeResponses[keyof UnlinkShirabeResponses];
-
-export type GetShirabeConnectionData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/v1/user/connections/shirabe';
-};
-
-export type GetShirabeConnectionErrors = {
-    /**
-     * Unauthorized
-     */
-    401: Error401;
-    /**
-     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
-     */
-    429: Error429;
-    /**
-     * Internal Server Error
-     */
-    500: Error500;
-};
-
-export type GetShirabeConnectionError = GetShirabeConnectionErrors[keyof GetShirabeConnectionErrors];
-
-export type GetShirabeConnectionResponses = {
-    /**
-     * OK
-     */
-    200: {
-        connection: ShirabeConnection;
-    };
-};
-
-export type GetShirabeConnectionResponse = GetShirabeConnectionResponses[keyof GetShirabeConnectionResponses];
-
-export type StartShirabeLinkData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/v1/user/connections/shirabe';
-};
-
-export type StartShirabeLinkErrors = {
-    /**
-     * Bad Request
-     */
-    400: Error400;
-    /**
-     * Unauthorized
-     */
-    401: Error401;
-    /**
-     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
-     */
-    429: Error429;
-    /**
-     * Internal Server Error
-     */
-    500: Error500;
-};
-
-export type StartShirabeLinkError = StartShirabeLinkErrors[keyof StartShirabeLinkErrors];
-
-export type StartShirabeLinkResponses = {
-    /**
-     * Created
-     */
-    201: {
-        /**
-         * Send the reader here. Shirabe asks them to approve, then redirects back.
-         */
-        authorizeUrl: string;
-        /**
-         * Opaque. Comes back on the redirect and must be handed to the callback unchanged.
-         */
-        state: string;
-    };
-};
-
-export type StartShirabeLinkResponse = StartShirabeLinkResponses[keyof StartShirabeLinkResponses];
-
-export type CompleteShirabeLinkData = {
-    body: {
-        /**
-         * The one-time authorization code from the redirect.
-         */
-        code: string;
-        /**
-         * The sealed state from the redirect, unchanged.
-         */
-        state: string;
-    };
-    path?: never;
-    query?: never;
-    url: '/v1/user/connections/shirabe/callback';
-};
-
-export type CompleteShirabeLinkErrors = {
-    /**
-     * Bad Request
-     */
-    400: Error400;
-    /**
-     * Unauthorized
-     */
-    401: Error401;
-    /**
-     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
-     */
-    429: Error429;
-    /**
-     * Internal Server Error
-     */
-    500: Error500;
-};
-
-export type CompleteShirabeLinkError = CompleteShirabeLinkErrors[keyof CompleteShirabeLinkErrors];
-
-export type CompleteShirabeLinkResponses = {
-    /**
-     * OK
-     */
-    200: {
-        connection: ShirabeConnection;
-    };
-};
-
-export type CompleteShirabeLinkResponse = CompleteShirabeLinkResponses[keyof CompleteShirabeLinkResponses];
-
-export type GetShirabeCredentialData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/v1/user/connections/shirabe/credential';
-};
-
-export type GetShirabeCredentialErrors = {
-    /**
-     * Unauthorized
-     */
-    401: Error401;
-    /**
-     * Forbidden
-     */
-    403: Error403;
-    /**
-     * Not Found
-     */
-    404: Error404;
-    /**
-     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
-     */
-    429: Error429;
-    /**
-     * Internal Server Error
-     */
-    500: Error500;
-};
-
-export type GetShirabeCredentialError = GetShirabeCredentialErrors[keyof GetShirabeCredentialErrors];
-
-export type GetShirabeCredentialResponses = {
-    /**
-     * OK
-     */
-    200: {
-        /**
-         * The reader's Shirabe API key.
-         */
-        token: string;
-    };
-};
-
-export type GetShirabeCredentialResponse = GetShirabeCredentialResponses[keyof GetShirabeCredentialResponses];
-
-export type ResyncShirabeStackData = {
-    body: {
-        /**
-         * The fingerprint Shirabe returned on the lookup.
-         */
-        stackFingerprint: string;
-    };
-    path?: never;
-    query?: never;
-    url: '/v1/user/connections/shirabe/resync';
-};
-
-export type ResyncShirabeStackErrors = {
-    /**
-     * Unauthorized
-     */
-    401: Error401;
-    /**
-     * Forbidden
-     */
-    403: Error403;
-    /**
-     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
-     */
-    429: Error429;
-    /**
-     * Internal Server Error
-     */
-    500: Error500;
-};
-
-export type ResyncShirabeStackError = ResyncShirabeStackErrors[keyof ResyncShirabeStackErrors];
-
-export type ResyncShirabeStackResponses = {
-    /**
-     * Reconciled, or nothing to reconcile.
-     */
-    204: void;
-};
-
-export type ResyncShirabeStackResponse = ResyncShirabeStackResponses[keyof ResyncShirabeStackResponses];
-
-export type ReportShirabeRefusalData = {
-    body: {
-        /**
-         * The HTTP status Shirabe answered the lookup with.
-         */
-        status: number;
-    };
-    path?: never;
-    query?: never;
-    url: '/v1/user/connections/shirabe/refused';
-};
-
-export type ReportShirabeRefusalErrors = {
-    /**
-     * Unauthorized
-     */
-    401: Error401;
-    /**
-     * Forbidden
-     */
-    403: Error403;
-    /**
-     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
-     */
-    429: Error429;
-    /**
-     * Internal Server Error
-     */
-    500: Error500;
-};
-
-export type ReportShirabeRefusalError = ReportShirabeRefusalErrors[keyof ReportShirabeRefusalErrors];
-
-export type ReportShirabeRefusalResponses = {
-    /**
-     * Recorded, or nothing worth recording.
-     */
-    204: void;
-};
-
-export type ReportShirabeRefusalResponse = ReportShirabeRefusalResponses[keyof ReportShirabeRefusalResponses];
-
 export type UnlinkPatreonData = {
     body?: never;
     path?: never;
@@ -4834,6 +6116,486 @@ export type CompletePatreonLinkResponses = {
 };
 
 export type CompletePatreonLinkResponse = CompletePatreonLinkResponses[keyof CompletePatreonLinkResponses];
+
+export type UnlinkTrackerData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/v1/user/connections/tracker';
+};
+
+export type UnlinkTrackerErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Not Found
+     */
+    404: Error404;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type UnlinkTrackerError = UnlinkTrackerErrors[keyof UnlinkTrackerErrors];
+
+export type UnlinkTrackerResponses = {
+    /**
+     * No Content
+     */
+    204: void;
+};
+
+export type UnlinkTrackerResponse = UnlinkTrackerResponses[keyof UnlinkTrackerResponses];
+
+export type GetTrackerConnectionData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/v1/user/connections/tracker';
+};
+
+export type GetTrackerConnectionErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type GetTrackerConnectionError = GetTrackerConnectionErrors[keyof GetTrackerConnectionErrors];
+
+export type GetTrackerConnectionResponses = {
+    /**
+     * OK
+     */
+    200: TrackerState;
+};
+
+export type GetTrackerConnectionResponse = GetTrackerConnectionResponses[keyof GetTrackerConnectionResponses];
+
+export type StartTrackerLinkData = {
+    body: {
+        provider: 'ANILIST' | 'MAL';
+    };
+    path?: never;
+    query?: never;
+    url: '/v1/user/connections/tracker';
+};
+
+export type StartTrackerLinkErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type StartTrackerLinkError = StartTrackerLinkErrors[keyof StartTrackerLinkErrors];
+
+export type StartTrackerLinkResponses = {
+    /**
+     * Created
+     */
+    201: {
+        authorizeUrl: string;
+        state: string;
+    };
+};
+
+export type StartTrackerLinkResponse = StartTrackerLinkResponses[keyof StartTrackerLinkResponses];
+
+export type CompleteTrackerLinkData = {
+    body: {
+        provider: 'ANILIST' | 'MAL';
+        code: string;
+        state: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/v1/user/connections/tracker/callback';
+};
+
+export type CompleteTrackerLinkErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type CompleteTrackerLinkError = CompleteTrackerLinkErrors[keyof CompleteTrackerLinkErrors];
+
+export type CompleteTrackerLinkResponses = {
+    /**
+     * Linked
+     */
+    200: TrackerState;
+};
+
+export type CompleteTrackerLinkResponse = CompleteTrackerLinkResponses[keyof CompleteTrackerLinkResponses];
+
+export type SyncTrackerConnectionData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/v1/user/connections/tracker/sync';
+};
+
+export type SyncTrackerConnectionErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Not Found
+     */
+    404: Error404;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type SyncTrackerConnectionError = SyncTrackerConnectionErrors[keyof SyncTrackerConnectionErrors];
+
+export type SyncTrackerConnectionResponses = {
+    /**
+     * Synced
+     */
+    200: TrackerState;
+};
+
+export type SyncTrackerConnectionResponse = SyncTrackerConnectionResponses[keyof SyncTrackerConnectionResponses];
+
+export type UpdateTrackerSettingsData = {
+    body: {
+        autoSyncEnabled?: boolean;
+        spoilerGuardEnabled?: boolean;
+        hidePlanToWatch?: boolean;
+    };
+    path?: never;
+    query?: never;
+    url: '/v1/user/connections/tracker/settings';
+};
+
+export type UpdateTrackerSettingsErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Not Found
+     */
+    404: Error404;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type UpdateTrackerSettingsError = UpdateTrackerSettingsErrors[keyof UpdateTrackerSettingsErrors];
+
+export type UpdateTrackerSettingsResponses = {
+    /**
+     * Updated
+     */
+    200: TrackerState;
+};
+
+export type UpdateTrackerSettingsResponse = UpdateTrackerSettingsResponses[keyof UpdateTrackerSettingsResponses];
+
+export type ListUserDictionariesData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/v1/user/dictionaries';
+};
+
+export type ListUserDictionariesErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type ListUserDictionariesError = ListUserDictionariesErrors[keyof ListUserDictionariesErrors];
+
+export type ListUserDictionariesResponses = {
+    /**
+     * OK
+     */
+    200: UserDictionaryListResponse;
+};
+
+export type ListUserDictionariesResponse = ListUserDictionariesResponses[keyof ListUserDictionariesResponses];
+
+export type UpdateUserDictionariesData = {
+    body: {
+        items: Array<{
+            id: string;
+            enabled: boolean;
+        }>;
+    };
+    path?: never;
+    query?: never;
+    url: '/v1/user/dictionaries';
+};
+
+export type UpdateUserDictionariesErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type UpdateUserDictionariesError = UpdateUserDictionariesErrors[keyof UpdateUserDictionariesErrors];
+
+export type UpdateUserDictionariesResponses = {
+    /**
+     * OK
+     */
+    200: UserDictionaryListResponse;
+};
+
+export type UpdateUserDictionariesResponse = UpdateUserDictionariesResponses[keyof UpdateUserDictionariesResponses];
+
+export type DeleteUserDictionaryData = {
+    body?: never;
+    path: {
+        /**
+         * Numeric ID of the user's attached custom dictionary.
+         */
+        id: number;
+    };
+    query?: never;
+    url: '/v1/user/dictionaries/{id}';
+};
+
+export type DeleteUserDictionaryErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Not Found
+     */
+    404: Error404;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type DeleteUserDictionaryError = DeleteUserDictionaryErrors[keyof DeleteUserDictionaryErrors];
+
+export type DeleteUserDictionaryResponses = {
+    /**
+     * OK
+     */
+    200: {
+        stackFingerprint: string;
+    };
+};
+
+export type DeleteUserDictionaryResponse = DeleteUserDictionaryResponses[keyof DeleteUserDictionaryResponses];
+
+export type ReserveUserDictionaryUploadData = {
+    body: {
+        /**
+         * Exact size of the `.zip` to upload, in bytes.
+         */
+        sizeBytes: number;
+    };
+    path?: never;
+    query?: never;
+    url: '/v1/user/dictionaries/uploads';
+};
+
+export type ReserveUserDictionaryUploadErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Not Found
+     */
+    404: Error404;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type ReserveUserDictionaryUploadError = ReserveUserDictionaryUploadErrors[keyof ReserveUserDictionaryUploadErrors];
+
+export type ReserveUserDictionaryUploadResponses = {
+    /**
+     * Created
+     */
+    201: {
+        uploadId: string;
+        /**
+         * Presigned URL to PUT the file to.
+         */
+        url: string;
+        method: 'PUT';
+        /**
+         * Headers the PUT must send.
+         */
+        headers: {
+            [key: string]: string;
+        };
+        expiresAt: string;
+    };
+};
+
+export type ReserveUserDictionaryUploadResponse = ReserveUserDictionaryUploadResponses[keyof ReserveUserDictionaryUploadResponses];
+
+export type CompleteUserDictionaryUploadData = {
+    body?: never;
+    path: {
+        /**
+         * Upload ID from the reservation.
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v1/user/dictionaries/uploads/{id}/complete';
+};
+
+export type CompleteUserDictionaryUploadErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Not Found
+     */
+    404: Error404;
+    /**
+     * Conflict
+     */
+    409: Error409;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type CompleteUserDictionaryUploadError = CompleteUserDictionaryUploadErrors[keyof CompleteUserDictionaryUploadErrors];
+
+export type CompleteUserDictionaryUploadResponses = {
+    /**
+     * Ready (an identical file was already indexed)
+     */
+    201: UserDictionaryUploadResult;
+    /**
+     * Indexing
+     */
+    202: UserDictionaryUploadResult;
+};
+
+export type CompleteUserDictionaryUploadResponse = CompleteUserDictionaryUploadResponses[keyof CompleteUserDictionaryUploadResponses];
 
 export type ListExcludedMediaData = {
     body?: never;
@@ -5855,6 +7617,8 @@ export type GetEmailPreferencesByTokenResponses = {
             recap: boolean;
             checkins: boolean;
             updates: boolean;
+            requests: boolean;
+            words: boolean;
         };
         /**
          * Which category the email carrying this token belonged to, when
@@ -5862,7 +7626,7 @@ export type GetEmailPreferencesByTokenResponses = {
          * the reader clicked about.
          *
          */
-        category?: 'recap' | 'checkins' | 'updates';
+        category?: 'recap' | 'checkins' | 'updates' | 'requests' | 'words';
     };
 };
 
@@ -5882,6 +7646,8 @@ export type UpdateEmailPreferencesByTokenData = {
         recap?: boolean;
         checkins?: boolean;
         updates?: boolean;
+        requests?: boolean;
+        words?: boolean;
     };
     path?: never;
     query?: never;
@@ -5907,6 +7673,8 @@ export type UpdateEmailPreferencesByTokenResponses = {
             recap: boolean;
             checkins: boolean;
             updates: boolean;
+            requests: boolean;
+            words: boolean;
         };
     };
 };
@@ -6416,6 +8184,43 @@ export type GetCollectionStatsResponses = {
 
 export type GetCollectionStatsResponse = GetCollectionStatsResponses[keyof GetCollectionStatsResponses];
 
+export type GetAdminOverviewData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/v1/admin/overview';
+};
+
+export type GetAdminOverviewErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type GetAdminOverviewError = GetAdminOverviewErrors[keyof GetAdminOverviewErrors];
+
+export type GetAdminOverviewResponses = {
+    /**
+     * OK
+     */
+    200: AdminOverview;
+};
+
+export type GetAdminOverviewResponse = GetAdminOverviewResponses[keyof GetAdminOverviewResponses];
+
 export type ListAdminReportsData = {
     body?: never;
     path?: never;
@@ -6710,60 +8515,6 @@ export type UpdateAdminReportResponses = {
 
 export type UpdateAdminReportResponse = UpdateAdminReportResponses[keyof UpdateAdminReportResponses];
 
-export type ListAgentActivityData = {
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * Only return activity at or after this timestamp. Defaults to 24 hours ago.
-         */
-        since?: string;
-        /**
-         * Only return edits made in answer to this report
-         */
-        reportId?: number;
-        /**
-         * Maximum entries to return
-         */
-        take?: number;
-    };
-    url: '/v1/admin/agent-activity';
-};
-
-export type ListAgentActivityErrors = {
-    /**
-     * Bad Request
-     */
-    400: Error400;
-    /**
-     * Unauthorized
-     */
-    401: Error401;
-    /**
-     * Forbidden
-     */
-    403: Error403;
-    /**
-     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
-     */
-    429: Error429;
-    /**
-     * Internal Server Error
-     */
-    500: Error500;
-};
-
-export type ListAgentActivityError = ListAgentActivityErrors[keyof ListAgentActivityErrors];
-
-export type ListAgentActivityResponses = {
-    /**
-     * OK
-     */
-    200: AgentActivityResponse;
-};
-
-export type ListAgentActivityResponse = ListAgentActivityResponses[keyof ListAgentActivityResponses];
-
 export type GetAnnouncementData = {
     body?: never;
     path?: never;
@@ -7029,49 +8780,24 @@ export type UpdateAdminUserQuotaResponses = {
 
 export type UpdateAdminUserQuotaResponse = UpdateAdminUserQuotaResponses[keyof UpdateAdminUserQuotaResponses];
 
-export type ListAdminRoadmapData = {
+export type ListAdminContentRequestsData = {
     body?: never;
     path?: never;
-    query?: never;
-    url: '/v1/admin/roadmap';
-};
-
-export type ListAdminRoadmapErrors = {
-    /**
-     * Unauthorized
-     */
-    401: Error401;
-    /**
-     * Forbidden
-     */
-    403: Error403;
-    /**
-     * Internal Server Error
-     */
-    500: Error500;
-};
-
-export type ListAdminRoadmapError = ListAdminRoadmapErrors[keyof ListAdminRoadmapErrors];
-
-export type ListAdminRoadmapResponses = {
-    /**
-     * OK
-     */
-    200: {
-        items: Array<RoadmapItem>;
+    query?: {
+        status?: 'OPEN' | 'PLANNED' | 'IN_PROGRESS' | 'RELEASED' | 'DECLINED';
+        category?: 'ANIME' | 'JDRAMA' | 'YOUTUBE' | 'AUDIOBOOK';
+        /**
+         * Only requests flagged as possible duplicates.
+         */
+        flagged?: boolean;
+        q?: string;
+        page?: number;
+        take?: number;
     };
+    url: '/v1/admin/requests';
 };
 
-export type ListAdminRoadmapResponse = ListAdminRoadmapResponses[keyof ListAdminRoadmapResponses];
-
-export type CreateAdminRoadmapItemData = {
-    body: RoadmapItemWrite;
-    path?: never;
-    query?: never;
-    url: '/v1/admin/roadmap';
-};
-
-export type CreateAdminRoadmapItemErrors = {
+export type ListAdminContentRequestsErrors = {
     /**
      * Bad Request
      */
@@ -7090,41 +8816,104 @@ export type CreateAdminRoadmapItemErrors = {
     500: Error500;
 };
 
-export type CreateAdminRoadmapItemError = CreateAdminRoadmapItemErrors[keyof CreateAdminRoadmapItemErrors];
+export type ListAdminContentRequestsError = ListAdminContentRequestsErrors[keyof ListAdminContentRequestsErrors];
 
-export type CreateAdminRoadmapItemResponses = {
+export type ListAdminContentRequestsResponses = {
     /**
-     * Created
+     * OK
      */
-    201: RoadmapItem;
+    200: {
+        items: Array<AdminContentRequest>;
+        total: number;
+    };
 };
 
-export type CreateAdminRoadmapItemResponse = CreateAdminRoadmapItemResponses[keyof CreateAdminRoadmapItemResponses];
+export type ListAdminContentRequestsResponse = ListAdminContentRequestsResponses[keyof ListAdminContentRequestsResponses];
 
-export type UpdateAdminRoadmapItemData = {
+export type UpdateAdminContentRequestData = {
     body: {
-        kind?: 'CONTENT' | 'FEATURE';
-        status?: 'PROPOSED' | 'CONSIDERING' | 'PLANNED' | 'IN_PROGRESS' | 'RELEASED' | 'DECLINED';
+        status?: 'OPEN' | 'PLANNED' | 'IN_PROGRESS' | 'RELEASED' | 'DECLINED';
         title?: string;
-        description?: string;
-        sourceUrl?: string | null;
+        note?: string;
+        category?: 'ANIME' | 'JDRAMA' | 'YOUTUBE' | 'AUDIOBOOK';
+        kind?: 'NEW' | 'UPDATE';
         coverUrl?: string | null;
-        targetDate?: string | null;
-        introducedInVersion?: string | null;
-        sortOrder?: number;
-        proposerName?: string | null;
+        declineReason?: string | null;
+        /**
+         * Public id of the media the request is for or produced.
+         */
+        mediaId?: string | null;
+        /**
+         * Clear the possible-duplicate flag.
+         */
+        dismissDuplicate?: boolean;
     };
     path: {
         /**
-         * Public UUID of the roadmap item.
+         * Public UUID of the request.
          */
-        itemId: string;
+        requestId: string;
     };
     query?: never;
-    url: '/v1/admin/roadmap/{itemId}';
+    url: '/v1/admin/requests/{requestId}';
 };
 
-export type UpdateAdminRoadmapItemErrors = {
+export type UpdateAdminContentRequestErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Not Found
+     */
+    404: Error404;
+    /**
+     * Conflict
+     */
+    409: Error409;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type UpdateAdminContentRequestError = UpdateAdminContentRequestErrors[keyof UpdateAdminContentRequestErrors];
+
+export type UpdateAdminContentRequestResponses = {
+    /**
+     * Updated
+     */
+    200: AdminContentRequest;
+};
+
+export type UpdateAdminContentRequestResponse = UpdateAdminContentRequestResponses[keyof UpdateAdminContentRequestResponses];
+
+export type MergeAdminContentRequestData = {
+    body: {
+        /**
+         * The request to keep.
+         */
+        intoId: string;
+    };
+    path: {
+        /**
+         * Public UUID of the request.
+         */
+        requestId: string;
+    };
+    query?: never;
+    url: '/v1/admin/requests/{requestId}/merge';
+};
+
+export type MergeAdminContentRequestErrors = {
     /**
      * Bad Request
      */
@@ -7147,13 +8936,483 @@ export type UpdateAdminRoadmapItemErrors = {
     500: Error500;
 };
 
-export type UpdateAdminRoadmapItemError = UpdateAdminRoadmapItemErrors[keyof UpdateAdminRoadmapItemErrors];
+export type MergeAdminContentRequestError = MergeAdminContentRequestErrors[keyof MergeAdminContentRequestErrors];
 
-export type UpdateAdminRoadmapItemResponses = {
+export type MergeAdminContentRequestResponses = {
     /**
-     * Updated
+     * The request that was kept, with the merged counts.
      */
-    200: RoadmapItem;
+    200: AdminContentRequest;
 };
 
-export type UpdateAdminRoadmapItemResponse = UpdateAdminRoadmapItemResponses[keyof UpdateAdminRoadmapItemResponses];
+export type MergeAdminContentRequestResponse = MergeAdminContentRequestResponses[keyof MergeAdminContentRequestResponses];
+
+export type GetAdminPatreonOverviewData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Bypass the 5-minute cache and fetch live campaign members from Patreon
+         */
+        refreshCampaign?: boolean;
+    };
+    url: '/v1/admin/patreon';
+};
+
+export type GetAdminPatreonOverviewErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type GetAdminPatreonOverviewError = GetAdminPatreonOverviewErrors[keyof GetAdminPatreonOverviewErrors];
+
+export type GetAdminPatreonOverviewResponses = {
+    /**
+     * OK
+     */
+    200: AdminPatreonOverview;
+};
+
+export type GetAdminPatreonOverviewResponse = GetAdminPatreonOverviewResponses[keyof GetAdminPatreonOverviewResponses];
+
+export type RefreshAllAdminPatreonConnectionsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/v1/admin/patreon/refresh-all';
+};
+
+export type RefreshAllAdminPatreonConnectionsErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type RefreshAllAdminPatreonConnectionsError = RefreshAllAdminPatreonConnectionsErrors[keyof RefreshAllAdminPatreonConnectionsErrors];
+
+export type RefreshAllAdminPatreonConnectionsResponses = {
+    /**
+     * Refresh pass completed
+     */
+    200: {
+        checked: number;
+        failed: number;
+    };
+};
+
+export type RefreshAllAdminPatreonConnectionsResponse = RefreshAllAdminPatreonConnectionsResponses[keyof RefreshAllAdminPatreonConnectionsResponses];
+
+export type UnlinkAdminPatreonConnectionData = {
+    body?: never;
+    path: {
+        /**
+         * Internal Nadeshiko user ID whose Patreon link should be removed
+         */
+        userId: number;
+    };
+    query?: never;
+    url: '/v1/admin/patreon/connections/{userId}';
+};
+
+export type UnlinkAdminPatreonConnectionErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Not Found
+     */
+    404: Error404;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type UnlinkAdminPatreonConnectionError = UnlinkAdminPatreonConnectionErrors[keyof UnlinkAdminPatreonConnectionErrors];
+
+export type UnlinkAdminPatreonConnectionResponses = {
+    /**
+     * Connection removed
+     */
+    204: void;
+};
+
+export type UnlinkAdminPatreonConnectionResponse = UnlinkAdminPatreonConnectionResponses[keyof UnlinkAdminPatreonConnectionResponses];
+
+export type RefreshAdminPatreonConnectionData = {
+    body?: never;
+    path: {
+        /**
+         * Internal Nadeshiko user ID whose Patreon link should be refreshed
+         */
+        userId: number;
+    };
+    query?: never;
+    url: '/v1/admin/patreon/connections/{userId}/refresh';
+};
+
+export type RefreshAdminPatreonConnectionErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Not Found
+     */
+    404: Error404;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type RefreshAdminPatreonConnectionError = RefreshAdminPatreonConnectionErrors[keyof RefreshAdminPatreonConnectionErrors];
+
+export type RefreshAdminPatreonConnectionResponses = {
+    /**
+     * Refreshed connection state
+     */
+    200: AdminPatreonConnection;
+};
+
+export type RefreshAdminPatreonConnectionResponse = RefreshAdminPatreonConnectionResponses[keyof RefreshAdminPatreonConnectionResponses];
+
+export type ListAdminEmailsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Number of results per page
+         */
+        limit?: number;
+        /**
+         * Number of results to skip
+         */
+        offset?: number;
+        /**
+         * Case-insensitive substring match against the address and username
+         */
+        search?: string;
+        /**
+         * Only this email kind
+         */
+        kind?: string;
+        /**
+         * Only this delivery status
+         */
+        status?: 'sent' | 'delivered' | 'bounced' | 'complained' | 'failed' | 'suppressed';
+        /**
+         * Only sends from the last N days
+         */
+        days?: number;
+    };
+    url: '/v1/admin/emails';
+};
+
+export type ListAdminEmailsErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type ListAdminEmailsError = ListAdminEmailsErrors[keyof ListAdminEmailsErrors];
+
+export type ListAdminEmailsResponses = {
+    /**
+     * OK
+     */
+    200: {
+        emails: Array<AdminEmailSend>;
+        /**
+         * Sends matching the filters
+         */
+        total: number;
+        last24h: {
+            sent: number;
+            failed: number;
+            /**
+             * Bounces and complaints
+             */
+            bounced: number;
+            suppressed: number;
+        };
+    };
+};
+
+export type ListAdminEmailsResponse = ListAdminEmailsResponses[keyof ListAdminEmailsResponses];
+
+export type GetAdminEmailData = {
+    body?: never;
+    path: {
+        /**
+         * Send log id
+         */
+        emailId: number;
+    };
+    query?: never;
+    url: '/v1/admin/emails/{emailId}';
+};
+
+export type GetAdminEmailErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Not Found
+     */
+    404: Error404;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type GetAdminEmailError = GetAdminEmailErrors[keyof GetAdminEmailErrors];
+
+export type GetAdminEmailResponses = {
+    /**
+     * OK
+     */
+    200: {
+        email: AdminEmailSend;
+        events: Array<AdminEmailEvent>;
+    };
+};
+
+export type GetAdminEmailResponse = GetAdminEmailResponses[keyof GetAdminEmailResponses];
+
+export type ResendAdminEmailData = {
+    body?: never;
+    path: {
+        /**
+         * Send log id of the email to send again
+         */
+        emailId: number;
+    };
+    query?: never;
+    url: '/v1/admin/emails/{emailId}/resend';
+};
+
+export type ResendAdminEmailErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Not Found
+     */
+    404: Error404;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type ResendAdminEmailError = ResendAdminEmailErrors[keyof ResendAdminEmailErrors];
+
+export type ResendAdminEmailResponses = {
+    /**
+     * Sent again
+     */
+    204: void;
+};
+
+export type ResendAdminEmailResponse = ResendAdminEmailResponses[keyof ResendAdminEmailResponses];
+
+export type ListAdminEmailSuppressionsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Number of results per page
+         */
+        limit?: number;
+        /**
+         * Number of results to skip
+         */
+        offset?: number;
+        /**
+         * Case-insensitive substring match against the address
+         */
+        search?: string;
+    };
+    url: '/v1/admin/email-suppressions';
+};
+
+export type ListAdminEmailSuppressionsErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type ListAdminEmailSuppressionsError = ListAdminEmailSuppressionsErrors[keyof ListAdminEmailSuppressionsErrors];
+
+export type ListAdminEmailSuppressionsResponses = {
+    /**
+     * OK
+     */
+    200: {
+        suppressions: Array<AdminEmailSuppression>;
+        total: number;
+    };
+};
+
+export type ListAdminEmailSuppressionsResponse = ListAdminEmailSuppressionsResponses[keyof ListAdminEmailSuppressionsResponses];
+
+export type LiftAdminEmailSuppressionData = {
+    body: {
+        address: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/v1/admin/email-suppressions/lift';
+};
+
+export type LiftAdminEmailSuppressionErrors = {
+    /**
+     * Bad Request
+     */
+    400: Error400;
+    /**
+     * Unauthorized
+     */
+    401: Error401;
+    /**
+     * Forbidden
+     */
+    403: Error403;
+    /**
+     * Not Found
+     */
+    404: Error404;
+    /**
+     * Too Many Requests. The response body indicates whether the request was rejected due to per-minute rate limiting or monthly quota exhaustion.
+     */
+    429: Error429;
+    /**
+     * Internal Server Error
+     */
+    500: Error500;
+};
+
+export type LiftAdminEmailSuppressionError = LiftAdminEmailSuppressionErrors[keyof LiftAdminEmailSuppressionErrors];
+
+export type LiftAdminEmailSuppressionResponses = {
+    /**
+     * Lifted
+     */
+    204: void;
+};
+
+export type LiftAdminEmailSuppressionResponse = LiftAdminEmailSuppressionResponses[keyof LiftAdminEmailSuppressionResponses];

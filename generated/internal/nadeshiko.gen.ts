@@ -4,7 +4,7 @@ import { createClient as createApiClient, createConfig, type Client } from './cl
 import type { Auth } from './core/auth.gen';
 import type { ClientOptions } from './types.gen';
 import type * as Types from './types.gen';
-import { search, getSearchStats, searchWords, searchMedia, getStatsOverview, listMedia, getSegment, getSegmentContext, getMedia, listEpisodes, getEpisode, getMe, createUserApiKey, listExcludedMedia, addExcludedMedia, removeExcludedMedia, listFavoriteMedia, addFavoriteMedia, removeFavoriteMedia, listFamiliarMedia, listUserActivity, getUserActivityHeatmap, getUserActivityStats, listCollections, createCollection, getCollection, deleteCollection, addSegmentToCollection, searchCollectionSegments, removeSegmentFromCollection, listRoadmap, createRoadmapProposal, getCoveredWords, triggerCoveredWordsUpdate, createMedia, updateSegment, listSegmentRevisions, restoreSegmentRevision, updateMedia, deleteMedia, createEpisode, updateEpisode, deleteEpisode, listSegments, createSegment, createSegmentsBatch, moderateEpisodeSegments, getShirabeConnection, startShirabeLink, unlinkShirabe, completeShirabeLink, getShirabeCredential, resyncShirabeStack, reportShirabeRefusal, getPatreonConnection, startPatreonLink, unlinkPatreon, completePatreonLink, clearFamiliarMedia, forgetFamiliarMedia, createUserReport, getUserPreferences, updateUserPreferences, trackUserActivity, deleteUserActivity, deleteUserActivityByDate, deleteUserActivityById, exportUserData, createFeedback, getFeedbackFormToken, unsubscribeFromEmail, getEmailPreferencesByToken, updateEmailPreferencesByToken, updateCollection, updateCollectionSegment, getCollectionStats, listAdminReports, batchUpdateAdminReports, bulkUpdateAdminReports, bulkDeleteAdminReports, updateAdminReport, deleteAdminReport, listAgentActivity, getAnnouncement, updateAnnouncement, getAdminUsersWithProviders, listTiers, getAdminUserQuota, updateAdminUserQuota, listAdminRoadmap, createAdminRoadmapItem, updateAdminRoadmapItem, type Options } from './sdk.gen';
+import { search, getSearchStats, searchWords, searchMedia, getStatsOverview, listMedia, getSegment, getSegmentContext, getMedia, listEpisodes, getEpisode, getMe, createUserApiKey, listExcludedMedia, addExcludedMedia, removeExcludedMedia, listFavoriteMedia, addFavoriteMedia, removeFavoriteMedia, listFamiliarMedia, listUserActivity, getUserActivityHeatmap, getUserActivityStats, listCollections, createCollection, getCollection, deleteCollection, addSegmentToCollection, searchCollectionSegments, removeSegmentFromCollection, listContentRequests, createContentRequest, getContentRequestAllowance, listMyContentRequests, withdrawContentRequest, voteContentRequest, unvoteContentRequest, boostContentRequest, listNotifications, getUnreadNotificationCount, markNotificationsRead, listWordWatches, setWordWatch, checkWordWatch, updateWordWatch, deleteWordWatch, identifyDictionaryWord, getDictionaryKanjiIndex, getDictionaryKanji, getCoveredWords, triggerCoveredWordsUpdate, createMedia, updateSegment, listSegmentRevisions, restoreSegmentRevision, updateMedia, deleteMedia, createEpisode, updateEpisode, deleteEpisode, listSegments, createSegment, createSegmentsBatch, moderateEpisodeSegments, getPatreonConnection, startPatreonLink, unlinkPatreon, completePatreonLink, getTrackerConnection, startTrackerLink, unlinkTracker, completeTrackerLink, syncTrackerConnection, updateTrackerSettings, listUserDictionaries, updateUserDictionaries, deleteUserDictionary, reserveUserDictionaryUpload, completeUserDictionaryUpload, clearFamiliarMedia, forgetFamiliarMedia, createUserReport, getUserPreferences, updateUserPreferences, trackUserActivity, deleteUserActivity, deleteUserActivityByDate, deleteUserActivityById, exportUserData, createFeedback, getFeedbackFormToken, unsubscribeFromEmail, getEmailPreferencesByToken, updateEmailPreferencesByToken, updateCollection, updateCollectionSegment, getCollectionStats, getAdminOverview, listAdminReports, batchUpdateAdminReports, bulkUpdateAdminReports, bulkDeleteAdminReports, updateAdminReport, deleteAdminReport, getAnnouncement, updateAnnouncement, getAdminUsersWithProviders, listTiers, getAdminUserQuota, updateAdminUserQuota, listAdminContentRequests, updateAdminContentRequest, mergeAdminContentRequest, getAdminPatreonOverview, refreshAllAdminPatreonConnections, unlinkAdminPatreonConnection, refreshAdminPatreonConnection, listAdminEmails, getAdminEmail, resendAdminEmail, listAdminEmailSuppressions, liftAdminEmailSuppression, type Options } from './sdk.gen';
 import { withRetry, type RetryOptions } from './retry';
 import { NadeshikoError, type NadeshikoProblemDetails } from './errors';
 import { flatPaginate } from './paginate';
@@ -178,13 +178,88 @@ export type NadeshikoClient = {
       (params: Types.RemoveSegmentFromCollectionData['path'] & { throwOnError: false }): Promise<{ data: Types.RemoveSegmentFromCollectionResponse; response: Response; request: Request } | { error: Types.RemoveSegmentFromCollectionErrors; response: Response; request: Request }>;
       (params: Types.RemoveSegmentFromCollectionData['path']): Promise<Types.RemoveSegmentFromCollectionResponse>;
     };
-    listRoadmap: {
-      (params: { throwOnError: false }): Promise<{ data: Types.ListRoadmapResponse; response: Response; request: Request } | { error: Types.ListRoadmapErrors; response: Response; request: Request }>;
-      (): Promise<Types.ListRoadmapResponse>;
+    listContentRequests: {
+      (params: NonNullable<Types.ListContentRequestsData['query']> & { throwOnError: false }): Promise<{ data: Types.ListContentRequestsResponse; response: Response; request: Request } | { error: Types.ListContentRequestsErrors; response: Response; request: Request }>;
+      (params?: NonNullable<Types.ListContentRequestsData['query']>): Promise<Types.ListContentRequestsResponse>;
     };
-    createRoadmapProposal: {
-      (params: NonNullable<Types.CreateRoadmapProposalData['body']> & { throwOnError: false }): Promise<{ data: Types.CreateRoadmapProposalResponse; response: Response; request: Request } | { error: Types.CreateRoadmapProposalErrors; response: Response; request: Request }>;
-      (params: NonNullable<Types.CreateRoadmapProposalData['body']>): Promise<Types.CreateRoadmapProposalResponse>;
+    createContentRequest: {
+      (params: NonNullable<Types.CreateContentRequestData['body']> & { throwOnError: false }): Promise<{ data: Types.CreateContentRequestResponse; response: Response; request: Request } | { error: Types.CreateContentRequestErrors; response: Response; request: Request }>;
+      (params: NonNullable<Types.CreateContentRequestData['body']>): Promise<Types.CreateContentRequestResponse>;
+    };
+    getContentRequestAllowance: {
+      (params: { throwOnError: false }): Promise<{ data: Types.GetContentRequestAllowanceResponse; response: Response; request: Request } | { error: Types.GetContentRequestAllowanceErrors; response: Response; request: Request }>;
+      (): Promise<Types.GetContentRequestAllowanceResponse>;
+    };
+    listMyContentRequests: {
+      (params: NonNullable<Types.ListMyContentRequestsData['query']> & { throwOnError: false }): Promise<{ data: Types.ListMyContentRequestsResponse; response: Response; request: Request } | { error: Types.ListMyContentRequestsErrors; response: Response; request: Request }>;
+      (params?: NonNullable<Types.ListMyContentRequestsData['query']>): Promise<Types.ListMyContentRequestsResponse>;
+    };
+    withdrawContentRequest: {
+      (id: string): Promise<Types.WithdrawContentRequestResponse>;
+      (params: Types.WithdrawContentRequestData['path'] & { throwOnError: false }): Promise<{ data: Types.WithdrawContentRequestResponse; response: Response; request: Request } | { error: Types.WithdrawContentRequestErrors; response: Response; request: Request }>;
+      (params: Types.WithdrawContentRequestData['path']): Promise<Types.WithdrawContentRequestResponse>;
+    };
+    voteContentRequest: {
+      (id: string): Promise<Types.VoteContentRequestResponse>;
+      (params: Types.VoteContentRequestData['path'] & { throwOnError: false }): Promise<{ data: Types.VoteContentRequestResponse; response: Response; request: Request } | { error: Types.VoteContentRequestErrors; response: Response; request: Request }>;
+      (params: Types.VoteContentRequestData['path']): Promise<Types.VoteContentRequestResponse>;
+    };
+    unvoteContentRequest: {
+      (id: string): Promise<Types.UnvoteContentRequestResponse>;
+      (params: Types.UnvoteContentRequestData['path'] & { throwOnError: false }): Promise<{ data: Types.UnvoteContentRequestResponse; response: Response; request: Request } | { error: Types.UnvoteContentRequestErrors; response: Response; request: Request }>;
+      (params: Types.UnvoteContentRequestData['path']): Promise<Types.UnvoteContentRequestResponse>;
+    };
+    boostContentRequest: {
+      (id: string): Promise<Types.BoostContentRequestResponse>;
+      (params: Types.BoostContentRequestData['path'] & { throwOnError: false }): Promise<{ data: Types.BoostContentRequestResponse; response: Response; request: Request } | { error: Types.BoostContentRequestErrors; response: Response; request: Request }>;
+      (params: Types.BoostContentRequestData['path']): Promise<Types.BoostContentRequestResponse>;
+    };
+    listNotifications: {
+      (params: NonNullable<Types.ListNotificationsData['query']> & { throwOnError: false }): Promise<{ data: Types.ListNotificationsResponse; response: Response; request: Request } | { error: Types.ListNotificationsErrors; response: Response; request: Request }>;
+      (params?: NonNullable<Types.ListNotificationsData['query']>): Promise<Types.ListNotificationsResponse>;
+    };
+    getUnreadNotificationCount: {
+      (params: { throwOnError: false }): Promise<{ data: Types.GetUnreadNotificationCountResponse; response: Response; request: Request } | { error: Types.GetUnreadNotificationCountErrors; response: Response; request: Request }>;
+      (): Promise<Types.GetUnreadNotificationCountResponse>;
+    };
+    markNotificationsRead: {
+      (params: NonNullable<Types.MarkNotificationsReadData['body']> & { throwOnError: false }): Promise<{ data: Types.MarkNotificationsReadResponse; response: Response; request: Request } | { error: Types.MarkNotificationsReadErrors; response: Response; request: Request }>;
+      (params?: NonNullable<Types.MarkNotificationsReadData['body']>): Promise<Types.MarkNotificationsReadResponse>;
+    };
+    listWordWatches: {
+      (params: { throwOnError: false }): Promise<{ data: Types.ListWordWatchesResponse; response: Response; request: Request } | { error: Types.ListWordWatchesErrors; response: Response; request: Request }>;
+      (): Promise<Types.ListWordWatchesResponse>;
+    };
+    setWordWatch: {
+      (params: NonNullable<Types.SetWordWatchData['body']> & { throwOnError: false }): Promise<{ data: Types.SetWordWatchResponse; response: Response; request: Request } | { error: Types.SetWordWatchErrors; response: Response; request: Request }>;
+      (params: NonNullable<Types.SetWordWatchData['body']>): Promise<Types.SetWordWatchResponse>;
+    };
+    checkWordWatch: {
+      (params: NonNullable<Types.CheckWordWatchData['query']> & { throwOnError: false }): Promise<{ data: Types.CheckWordWatchResponse; response: Response; request: Request } | { error: Types.CheckWordWatchErrors; response: Response; request: Request }>;
+      (params?: NonNullable<Types.CheckWordWatchData['query']>): Promise<Types.CheckWordWatchResponse>;
+    };
+    updateWordWatch: {
+      (id: string): Promise<Types.UpdateWordWatchResponse>;
+      (params: Types.UpdateWordWatchData['path'] & NonNullable<Types.UpdateWordWatchData['body']> & { throwOnError: false }): Promise<{ data: Types.UpdateWordWatchResponse; response: Response; request: Request } | { error: Types.UpdateWordWatchErrors; response: Response; request: Request }>;
+      (params: Types.UpdateWordWatchData['path'] & NonNullable<Types.UpdateWordWatchData['body']>): Promise<Types.UpdateWordWatchResponse>;
+    };
+    deleteWordWatch: {
+      (id: string): Promise<Types.DeleteWordWatchResponse>;
+      (params: Types.DeleteWordWatchData['path'] & { throwOnError: false }): Promise<{ data: Types.DeleteWordWatchResponse; response: Response; request: Request } | { error: Types.DeleteWordWatchErrors; response: Response; request: Request }>;
+      (params: Types.DeleteWordWatchData['path']): Promise<Types.DeleteWordWatchResponse>;
+    };
+    identifyDictionaryWord: {
+      (params: NonNullable<Types.IdentifyDictionaryWordData['query']> & { throwOnError: false }): Promise<{ data: Types.IdentifyDictionaryWordResponse; response: Response; request: Request } | { error: Types.IdentifyDictionaryWordErrors; response: Response; request: Request }>;
+      (params?: NonNullable<Types.IdentifyDictionaryWordData['query']>): Promise<Types.IdentifyDictionaryWordResponse>;
+    };
+    getDictionaryKanjiIndex: {
+      (params: NonNullable<Types.GetDictionaryKanjiIndexData['query']> & { throwOnError: false }): Promise<{ data: Types.GetDictionaryKanjiIndexResponse; response: Response; request: Request } | { error: Types.GetDictionaryKanjiIndexErrors; response: Response; request: Request }>;
+      (params?: NonNullable<Types.GetDictionaryKanjiIndexData['query']>): Promise<Types.GetDictionaryKanjiIndexResponse>;
+    };
+    getDictionaryKanji: {
+      (id: string): Promise<Types.GetDictionaryKanjiResponse>;
+      (params: Types.GetDictionaryKanjiData['path'] & NonNullable<Types.GetDictionaryKanjiData['query']> & { throwOnError: false }): Promise<{ data: Types.GetDictionaryKanjiResponse; response: Response; request: Request } | { error: Types.GetDictionaryKanjiErrors; response: Response; request: Request }>;
+      (params: Types.GetDictionaryKanjiData['path'] & NonNullable<Types.GetDictionaryKanjiData['query']>): Promise<Types.GetDictionaryKanjiResponse>;
     };
     getCoveredWords: {
       (params: NonNullable<Types.GetCoveredWordsData['query']> & { throwOnError: false }): Promise<{ data: Types.GetCoveredWordsResponse; response: Response; request: Request } | { error: Types.GetCoveredWordsErrors; response: Response; request: Request }>;
@@ -252,34 +327,6 @@ export type NadeshikoClient = {
       (params: Types.ModerateEpisodeSegmentsData['path'] & NonNullable<Types.ModerateEpisodeSegmentsData['body']> & { throwOnError: false }): Promise<{ data: Types.ModerateEpisodeSegmentsResponse; response: Response; request: Request } | { error: Types.ModerateEpisodeSegmentsErrors; response: Response; request: Request }>;
       (params: Types.ModerateEpisodeSegmentsData['path'] & NonNullable<Types.ModerateEpisodeSegmentsData['body']>): Promise<Types.ModerateEpisodeSegmentsResponse>;
     };
-    getShirabeConnection: {
-      (params: { throwOnError: false }): Promise<{ data: Types.GetShirabeConnectionResponse; response: Response; request: Request } | { error: Types.GetShirabeConnectionErrors; response: Response; request: Request }>;
-      (): Promise<Types.GetShirabeConnectionResponse>;
-    };
-    startShirabeLink: {
-      (params: { throwOnError: false }): Promise<{ data: Types.StartShirabeLinkResponse; response: Response; request: Request } | { error: Types.StartShirabeLinkErrors; response: Response; request: Request }>;
-      (): Promise<Types.StartShirabeLinkResponse>;
-    };
-    unlinkShirabe: {
-      (params: { throwOnError: false }): Promise<{ data: Types.UnlinkShirabeResponse; response: Response; request: Request } | { error: Types.UnlinkShirabeErrors; response: Response; request: Request }>;
-      (): Promise<Types.UnlinkShirabeResponse>;
-    };
-    completeShirabeLink: {
-      (params: NonNullable<Types.CompleteShirabeLinkData['body']> & { throwOnError: false }): Promise<{ data: Types.CompleteShirabeLinkResponse; response: Response; request: Request } | { error: Types.CompleteShirabeLinkErrors; response: Response; request: Request }>;
-      (params: NonNullable<Types.CompleteShirabeLinkData['body']>): Promise<Types.CompleteShirabeLinkResponse>;
-    };
-    getShirabeCredential: {
-      (params: { throwOnError: false }): Promise<{ data: Types.GetShirabeCredentialResponse; response: Response; request: Request } | { error: Types.GetShirabeCredentialErrors; response: Response; request: Request }>;
-      (): Promise<Types.GetShirabeCredentialResponse>;
-    };
-    resyncShirabeStack: {
-      (params: NonNullable<Types.ResyncShirabeStackData['body']> & { throwOnError: false }): Promise<{ data: Types.ResyncShirabeStackResponse; response: Response; request: Request } | { error: Types.ResyncShirabeStackErrors; response: Response; request: Request }>;
-      (params: NonNullable<Types.ResyncShirabeStackData['body']>): Promise<Types.ResyncShirabeStackResponse>;
-    };
-    reportShirabeRefusal: {
-      (params: NonNullable<Types.ReportShirabeRefusalData['body']> & { throwOnError: false }): Promise<{ data: Types.ReportShirabeRefusalResponse; response: Response; request: Request } | { error: Types.ReportShirabeRefusalErrors; response: Response; request: Request }>;
-      (params: NonNullable<Types.ReportShirabeRefusalData['body']>): Promise<Types.ReportShirabeRefusalResponse>;
-    };
     getPatreonConnection: {
       (params: { throwOnError: false }): Promise<{ data: Types.GetPatreonConnectionResponse; response: Response; request: Request } | { error: Types.GetPatreonConnectionErrors; response: Response; request: Request }>;
       (): Promise<Types.GetPatreonConnectionResponse>;
@@ -295,6 +342,52 @@ export type NadeshikoClient = {
     completePatreonLink: {
       (params: NonNullable<Types.CompletePatreonLinkData['body']> & { throwOnError: false }): Promise<{ data: Types.CompletePatreonLinkResponse; response: Response; request: Request } | { error: Types.CompletePatreonLinkErrors; response: Response; request: Request }>;
       (params: NonNullable<Types.CompletePatreonLinkData['body']>): Promise<Types.CompletePatreonLinkResponse>;
+    };
+    getTrackerConnection: {
+      (params: { throwOnError: false }): Promise<{ data: Types.GetTrackerConnectionResponse; response: Response; request: Request } | { error: Types.GetTrackerConnectionErrors; response: Response; request: Request }>;
+      (): Promise<Types.GetTrackerConnectionResponse>;
+    };
+    startTrackerLink: {
+      (params: NonNullable<Types.StartTrackerLinkData['body']> & { throwOnError: false }): Promise<{ data: Types.StartTrackerLinkResponse; response: Response; request: Request } | { error: Types.StartTrackerLinkErrors; response: Response; request: Request }>;
+      (params: NonNullable<Types.StartTrackerLinkData['body']>): Promise<Types.StartTrackerLinkResponse>;
+    };
+    unlinkTracker: {
+      (params: { throwOnError: false }): Promise<{ data: Types.UnlinkTrackerResponse; response: Response; request: Request } | { error: Types.UnlinkTrackerErrors; response: Response; request: Request }>;
+      (): Promise<Types.UnlinkTrackerResponse>;
+    };
+    completeTrackerLink: {
+      (params: NonNullable<Types.CompleteTrackerLinkData['body']> & { throwOnError: false }): Promise<{ data: Types.CompleteTrackerLinkResponse; response: Response; request: Request } | { error: Types.CompleteTrackerLinkErrors; response: Response; request: Request }>;
+      (params: NonNullable<Types.CompleteTrackerLinkData['body']>): Promise<Types.CompleteTrackerLinkResponse>;
+    };
+    syncTrackerConnection: {
+      (params: { throwOnError: false }): Promise<{ data: Types.SyncTrackerConnectionResponse; response: Response; request: Request } | { error: Types.SyncTrackerConnectionErrors; response: Response; request: Request }>;
+      (): Promise<Types.SyncTrackerConnectionResponse>;
+    };
+    updateTrackerSettings: {
+      (params: NonNullable<Types.UpdateTrackerSettingsData['body']> & { throwOnError: false }): Promise<{ data: Types.UpdateTrackerSettingsResponse; response: Response; request: Request } | { error: Types.UpdateTrackerSettingsErrors; response: Response; request: Request }>;
+      (params?: NonNullable<Types.UpdateTrackerSettingsData['body']>): Promise<Types.UpdateTrackerSettingsResponse>;
+    };
+    listUserDictionaries: {
+      (params: { throwOnError: false }): Promise<{ data: Types.ListUserDictionariesResponse; response: Response; request: Request } | { error: Types.ListUserDictionariesErrors; response: Response; request: Request }>;
+      (): Promise<Types.ListUserDictionariesResponse>;
+    };
+    updateUserDictionaries: {
+      (params: NonNullable<Types.UpdateUserDictionariesData['body']> & { throwOnError: false }): Promise<{ data: Types.UpdateUserDictionariesResponse; response: Response; request: Request } | { error: Types.UpdateUserDictionariesErrors; response: Response; request: Request }>;
+      (params: NonNullable<Types.UpdateUserDictionariesData['body']>): Promise<Types.UpdateUserDictionariesResponse>;
+    };
+    deleteUserDictionary: {
+      (id: number): Promise<Types.DeleteUserDictionaryResponse>;
+      (params: Types.DeleteUserDictionaryData['path'] & { throwOnError: false }): Promise<{ data: Types.DeleteUserDictionaryResponse; response: Response; request: Request } | { error: Types.DeleteUserDictionaryErrors; response: Response; request: Request }>;
+      (params: Types.DeleteUserDictionaryData['path']): Promise<Types.DeleteUserDictionaryResponse>;
+    };
+    reserveUserDictionaryUpload: {
+      (params: NonNullable<Types.ReserveUserDictionaryUploadData['body']> & { throwOnError: false }): Promise<{ data: Types.ReserveUserDictionaryUploadResponse; response: Response; request: Request } | { error: Types.ReserveUserDictionaryUploadErrors; response: Response; request: Request }>;
+      (params: NonNullable<Types.ReserveUserDictionaryUploadData['body']>): Promise<Types.ReserveUserDictionaryUploadResponse>;
+    };
+    completeUserDictionaryUpload: {
+      (id: string): Promise<Types.CompleteUserDictionaryUploadResponse>;
+      (params: Types.CompleteUserDictionaryUploadData['path'] & { throwOnError: false }): Promise<{ data: Types.CompleteUserDictionaryUploadResponse; response: Response; request: Request } | { error: Types.CompleteUserDictionaryUploadErrors; response: Response; request: Request }>;
+      (params: Types.CompleteUserDictionaryUploadData['path']): Promise<Types.CompleteUserDictionaryUploadResponse>;
     };
     clearFamiliarMedia: {
       (params: { throwOnError: false }): Promise<{ data: Types.ClearFamiliarMediaResponse; response: Response; request: Request } | { error: Types.ClearFamiliarMediaErrors; response: Response; request: Request }>;
@@ -373,6 +466,10 @@ export type NadeshikoClient = {
       (params: Types.GetCollectionStatsData['path'] & { throwOnError: false }): Promise<{ data: Types.GetCollectionStatsResponse; response: Response; request: Request } | { error: Types.GetCollectionStatsErrors; response: Response; request: Request }>;
       (params: Types.GetCollectionStatsData['path']): Promise<Types.GetCollectionStatsResponse>;
     };
+    getAdminOverview: {
+      (params: { throwOnError: false }): Promise<{ data: Types.GetAdminOverviewResponse; response: Response; request: Request } | { error: Types.GetAdminOverviewErrors; response: Response; request: Request }>;
+      (): Promise<Types.GetAdminOverviewResponse>;
+    };
     listAdminReports: {
       (params: NonNullable<Types.ListAdminReportsData['query']> & { throwOnError: false }): Promise<{ data: Types.ListAdminReportsResponse; response: Response; request: Request } | { error: Types.ListAdminReportsErrors; response: Response; request: Request }>;
       (params?: NonNullable<Types.ListAdminReportsData['query']>): Promise<Types.ListAdminReportsResponse>;
@@ -400,10 +497,6 @@ export type NadeshikoClient = {
       (params: Types.DeleteAdminReportData['path'] & { throwOnError: false }): Promise<{ data: Types.DeleteAdminReportResponse; response: Response; request: Request } | { error: Types.DeleteAdminReportErrors; response: Response; request: Request }>;
       (params: Types.DeleteAdminReportData['path']): Promise<Types.DeleteAdminReportResponse>;
     };
-    listAgentActivity: {
-      (params: NonNullable<Types.ListAgentActivityData['query']> & { throwOnError: false }): Promise<{ data: Types.ListAgentActivityResponse; response: Response; request: Request } | { error: Types.ListAgentActivityErrors; response: Response; request: Request }>;
-      (params?: NonNullable<Types.ListAgentActivityData['query']>): Promise<Types.ListAgentActivityResponse>;
-    };
     getAnnouncement: {
       (params: { throwOnError: false }): Promise<{ data: Types.GetAnnouncementResponse; response: Response; request: Request } | { error: Types.GetAnnouncementErrors; response: Response; request: Request }>;
       (): Promise<Types.GetAnnouncementResponse>;
@@ -430,18 +523,58 @@ export type NadeshikoClient = {
       (params: Types.UpdateAdminUserQuotaData['path'] & NonNullable<Types.UpdateAdminUserQuotaData['body']> & { throwOnError: false }): Promise<{ data: Types.UpdateAdminUserQuotaResponse; response: Response; request: Request } | { error: Types.UpdateAdminUserQuotaErrors; response: Response; request: Request }>;
       (params: Types.UpdateAdminUserQuotaData['path'] & NonNullable<Types.UpdateAdminUserQuotaData['body']>): Promise<Types.UpdateAdminUserQuotaResponse>;
     };
-    listAdminRoadmap: {
-      (params: { throwOnError: false }): Promise<{ data: Types.ListAdminRoadmapResponse; response: Response; request: Request } | { error: Types.ListAdminRoadmapErrors; response: Response; request: Request }>;
-      (): Promise<Types.ListAdminRoadmapResponse>;
+    listAdminContentRequests: {
+      (params: NonNullable<Types.ListAdminContentRequestsData['query']> & { throwOnError: false }): Promise<{ data: Types.ListAdminContentRequestsResponse; response: Response; request: Request } | { error: Types.ListAdminContentRequestsErrors; response: Response; request: Request }>;
+      (params?: NonNullable<Types.ListAdminContentRequestsData['query']>): Promise<Types.ListAdminContentRequestsResponse>;
     };
-    createAdminRoadmapItem: {
-      (params: NonNullable<Types.CreateAdminRoadmapItemData['body']> & { throwOnError: false }): Promise<{ data: Types.CreateAdminRoadmapItemResponse; response: Response; request: Request } | { error: Types.CreateAdminRoadmapItemErrors; response: Response; request: Request }>;
-      (params: NonNullable<Types.CreateAdminRoadmapItemData['body']>): Promise<Types.CreateAdminRoadmapItemResponse>;
+    updateAdminContentRequest: {
+      (id: string): Promise<Types.UpdateAdminContentRequestResponse>;
+      (params: Types.UpdateAdminContentRequestData['path'] & NonNullable<Types.UpdateAdminContentRequestData['body']> & { throwOnError: false }): Promise<{ data: Types.UpdateAdminContentRequestResponse; response: Response; request: Request } | { error: Types.UpdateAdminContentRequestErrors; response: Response; request: Request }>;
+      (params: Types.UpdateAdminContentRequestData['path'] & NonNullable<Types.UpdateAdminContentRequestData['body']>): Promise<Types.UpdateAdminContentRequestResponse>;
     };
-    updateAdminRoadmapItem: {
-      (id: string): Promise<Types.UpdateAdminRoadmapItemResponse>;
-      (params: Types.UpdateAdminRoadmapItemData['path'] & NonNullable<Types.UpdateAdminRoadmapItemData['body']> & { throwOnError: false }): Promise<{ data: Types.UpdateAdminRoadmapItemResponse; response: Response; request: Request } | { error: Types.UpdateAdminRoadmapItemErrors; response: Response; request: Request }>;
-      (params: Types.UpdateAdminRoadmapItemData['path'] & NonNullable<Types.UpdateAdminRoadmapItemData['body']>): Promise<Types.UpdateAdminRoadmapItemResponse>;
+    mergeAdminContentRequest: {
+      (params: Types.MergeAdminContentRequestData['path'] & NonNullable<Types.MergeAdminContentRequestData['body']> & { throwOnError: false }): Promise<{ data: Types.MergeAdminContentRequestResponse; response: Response; request: Request } | { error: Types.MergeAdminContentRequestErrors; response: Response; request: Request }>;
+      (params: Types.MergeAdminContentRequestData['path'] & NonNullable<Types.MergeAdminContentRequestData['body']>): Promise<Types.MergeAdminContentRequestResponse>;
+    };
+    getAdminPatreonOverview: {
+      (params: NonNullable<Types.GetAdminPatreonOverviewData['query']> & { throwOnError: false }): Promise<{ data: Types.GetAdminPatreonOverviewResponse; response: Response; request: Request } | { error: Types.GetAdminPatreonOverviewErrors; response: Response; request: Request }>;
+      (params?: NonNullable<Types.GetAdminPatreonOverviewData['query']>): Promise<Types.GetAdminPatreonOverviewResponse>;
+    };
+    refreshAllAdminPatreonConnections: {
+      (params: { throwOnError: false }): Promise<{ data: Types.RefreshAllAdminPatreonConnectionsResponse; response: Response; request: Request } | { error: Types.RefreshAllAdminPatreonConnectionsErrors; response: Response; request: Request }>;
+      (): Promise<Types.RefreshAllAdminPatreonConnectionsResponse>;
+    };
+    unlinkAdminPatreonConnection: {
+      (id: number): Promise<Types.UnlinkAdminPatreonConnectionResponse>;
+      (params: Types.UnlinkAdminPatreonConnectionData['path'] & { throwOnError: false }): Promise<{ data: Types.UnlinkAdminPatreonConnectionResponse; response: Response; request: Request } | { error: Types.UnlinkAdminPatreonConnectionErrors; response: Response; request: Request }>;
+      (params: Types.UnlinkAdminPatreonConnectionData['path']): Promise<Types.UnlinkAdminPatreonConnectionResponse>;
+    };
+    refreshAdminPatreonConnection: {
+      (id: number): Promise<Types.RefreshAdminPatreonConnectionResponse>;
+      (params: Types.RefreshAdminPatreonConnectionData['path'] & { throwOnError: false }): Promise<{ data: Types.RefreshAdminPatreonConnectionResponse; response: Response; request: Request } | { error: Types.RefreshAdminPatreonConnectionErrors; response: Response; request: Request }>;
+      (params: Types.RefreshAdminPatreonConnectionData['path']): Promise<Types.RefreshAdminPatreonConnectionResponse>;
+    };
+    listAdminEmails: {
+      (params: NonNullable<Types.ListAdminEmailsData['query']> & { throwOnError: false }): Promise<{ data: Types.ListAdminEmailsResponse; response: Response; request: Request } | { error: Types.ListAdminEmailsErrors; response: Response; request: Request }>;
+      (params?: NonNullable<Types.ListAdminEmailsData['query']>): Promise<Types.ListAdminEmailsResponse>;
+    };
+    getAdminEmail: {
+      (id: number): Promise<Types.GetAdminEmailResponse>;
+      (params: Types.GetAdminEmailData['path'] & { throwOnError: false }): Promise<{ data: Types.GetAdminEmailResponse; response: Response; request: Request } | { error: Types.GetAdminEmailErrors; response: Response; request: Request }>;
+      (params: Types.GetAdminEmailData['path']): Promise<Types.GetAdminEmailResponse>;
+    };
+    resendAdminEmail: {
+      (id: number): Promise<Types.ResendAdminEmailResponse>;
+      (params: Types.ResendAdminEmailData['path'] & { throwOnError: false }): Promise<{ data: Types.ResendAdminEmailResponse; response: Response; request: Request } | { error: Types.ResendAdminEmailErrors; response: Response; request: Request }>;
+      (params: Types.ResendAdminEmailData['path']): Promise<Types.ResendAdminEmailResponse>;
+    };
+    listAdminEmailSuppressions: {
+      (params: NonNullable<Types.ListAdminEmailSuppressionsData['query']> & { throwOnError: false }): Promise<{ data: Types.ListAdminEmailSuppressionsResponse; response: Response; request: Request } | { error: Types.ListAdminEmailSuppressionsErrors; response: Response; request: Request }>;
+      (params?: NonNullable<Types.ListAdminEmailSuppressionsData['query']>): Promise<Types.ListAdminEmailSuppressionsResponse>;
+    };
+    liftAdminEmailSuppression: {
+      (params: NonNullable<Types.LiftAdminEmailSuppressionData['body']> & { throwOnError: false }): Promise<{ data: Types.LiftAdminEmailSuppressionResponse; response: Response; request: Request } | { error: Types.LiftAdminEmailSuppressionErrors; response: Response; request: Request }>;
+      (params: NonNullable<Types.LiftAdminEmailSuppressionData['body']>): Promise<Types.LiftAdminEmailSuppressionResponse>;
     };
   };
 
@@ -756,15 +889,145 @@ export function createNadeshikoClient(config: NadeshikoConfig): NadeshikoClient 
     return tOE === false ? p : p.then((r: any) => r.data);
   };
 
-  const _listRoadmap = (params?: any) => {
-    const tOE = params?.throwOnError;
-    const p = listRoadmap({ client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+  const _listContentRequests = (params?: any) => {
+    const { throwOnError: tOE, ...query } = params ?? {};
+    const p = listContentRequests({ ...(Object.keys(query).length > 0 ? { query } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
     return tOE === false ? p : p.then((r: any) => r.data);
   };
 
-  const _createRoadmapProposal = (params?: any) => {
+  const _createContentRequest = (params?: any) => {
     const { throwOnError: tOE, ...body } = params ?? {};
-    const p = createRoadmapProposal({ ...(Object.keys(body).length > 0 ? { body } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    const p = createContentRequest({ ...(Object.keys(body).length > 0 ? { body } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _getContentRequestAllowance = (params?: any) => {
+    const tOE = params?.throwOnError;
+    const p = getContentRequestAllowance({ client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _listMyContentRequests = (params?: any) => {
+    const { throwOnError: tOE, ...query } = params ?? {};
+    const p = listMyContentRequests({ ...(Object.keys(query).length > 0 ? { query } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _withdrawContentRequest = (paramsOrId?: any) => {
+    if (typeof paramsOrId === 'string') {
+      return withdrawContentRequest({ throwOnError: true, path: { requestId: paramsOrId }, client: clientInstance } as any).then((r: any) => r.data);
+    }
+    const params = paramsOrId;
+    const { throwOnError: tOE, requestId } = params ?? {};
+    const p = withdrawContentRequest({ path: { requestId }, client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _voteContentRequest = (paramsOrId?: any) => {
+    if (typeof paramsOrId === 'string') {
+      return voteContentRequest({ throwOnError: true, path: { requestId: paramsOrId }, client: clientInstance } as any).then((r: any) => r.data);
+    }
+    const params = paramsOrId;
+    const { throwOnError: tOE, requestId } = params ?? {};
+    const p = voteContentRequest({ path: { requestId }, client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _unvoteContentRequest = (paramsOrId?: any) => {
+    if (typeof paramsOrId === 'string') {
+      return unvoteContentRequest({ throwOnError: true, path: { requestId: paramsOrId }, client: clientInstance } as any).then((r: any) => r.data);
+    }
+    const params = paramsOrId;
+    const { throwOnError: tOE, requestId } = params ?? {};
+    const p = unvoteContentRequest({ path: { requestId }, client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _boostContentRequest = (paramsOrId?: any) => {
+    if (typeof paramsOrId === 'string') {
+      return boostContentRequest({ throwOnError: true, path: { requestId: paramsOrId }, client: clientInstance } as any).then((r: any) => r.data);
+    }
+    const params = paramsOrId;
+    const { throwOnError: tOE, requestId } = params ?? {};
+    const p = boostContentRequest({ path: { requestId }, client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _listNotifications = (params?: any) => {
+    const { throwOnError: tOE, ...query } = params ?? {};
+    const p = listNotifications({ ...(Object.keys(query).length > 0 ? { query } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _getUnreadNotificationCount = (params?: any) => {
+    const tOE = params?.throwOnError;
+    const p = getUnreadNotificationCount({ client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _markNotificationsRead = (params?: any) => {
+    const { throwOnError: tOE, ...body } = params ?? {};
+    const p = markNotificationsRead({ ...(Object.keys(body).length > 0 ? { body } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _listWordWatches = (params?: any) => {
+    const tOE = params?.throwOnError;
+    const p = listWordWatches({ client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _setWordWatch = (params?: any) => {
+    const { throwOnError: tOE, ...body } = params ?? {};
+    const p = setWordWatch({ ...(Object.keys(body).length > 0 ? { body } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _checkWordWatch = (params?: any) => {
+    const { throwOnError: tOE, ...query } = params ?? {};
+    const p = checkWordWatch({ ...(Object.keys(query).length > 0 ? { query } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _updateWordWatch = (paramsOrId?: any) => {
+    if (typeof paramsOrId === 'string') {
+      return updateWordWatch({ throwOnError: true, path: { watchId: paramsOrId }, client: clientInstance } as any).then((r: any) => r.data);
+    }
+    const params = paramsOrId;
+    const { throwOnError: tOE, watchId, ...body } = params ?? {};
+    const p = updateWordWatch({ path: { watchId }, ...(Object.keys(body).length > 0 ? { body } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _deleteWordWatch = (paramsOrId?: any) => {
+    if (typeof paramsOrId === 'string') {
+      return deleteWordWatch({ throwOnError: true, path: { watchId: paramsOrId }, client: clientInstance } as any).then((r: any) => r.data);
+    }
+    const params = paramsOrId;
+    const { throwOnError: tOE, watchId } = params ?? {};
+    const p = deleteWordWatch({ path: { watchId }, client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _identifyDictionaryWord = (params?: any) => {
+    const { throwOnError: tOE, ...query } = params ?? {};
+    const p = identifyDictionaryWord({ ...(Object.keys(query).length > 0 ? { query } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _getDictionaryKanjiIndex = (params?: any) => {
+    const { throwOnError: tOE, ...query } = params ?? {};
+    const p = getDictionaryKanjiIndex({ ...(Object.keys(query).length > 0 ? { query } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _getDictionaryKanji = (paramsOrId?: any) => {
+    if (typeof paramsOrId === 'string') {
+      return getDictionaryKanji({ throwOnError: true, path: { character: paramsOrId }, client: clientInstance } as any).then((r: any) => r.data);
+    }
+    const params = paramsOrId;
+    const { throwOnError: tOE, character, ...query } = params ?? {};
+    const p = getDictionaryKanji({ path: { character }, ...(Object.keys(query).length > 0 ? { query } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
     return tOE === false ? p : p.then((r: any) => r.data);
   };
 
@@ -889,48 +1152,6 @@ export function createNadeshikoClient(config: NadeshikoConfig): NadeshikoClient 
     return tOE === false ? p : p.then((r: any) => r.data);
   };
 
-  const _getShirabeConnection = (params?: any) => {
-    const tOE = params?.throwOnError;
-    const p = getShirabeConnection({ client: clientInstance, throwOnError: tOE === false ? false : true } as any);
-    return tOE === false ? p : p.then((r: any) => r.data);
-  };
-
-  const _startShirabeLink = (params?: any) => {
-    const tOE = params?.throwOnError;
-    const p = startShirabeLink({ client: clientInstance, throwOnError: tOE === false ? false : true } as any);
-    return tOE === false ? p : p.then((r: any) => r.data);
-  };
-
-  const _unlinkShirabe = (params?: any) => {
-    const tOE = params?.throwOnError;
-    const p = unlinkShirabe({ client: clientInstance, throwOnError: tOE === false ? false : true } as any);
-    return tOE === false ? p : p.then((r: any) => r.data);
-  };
-
-  const _completeShirabeLink = (params?: any) => {
-    const { throwOnError: tOE, ...body } = params ?? {};
-    const p = completeShirabeLink({ ...(Object.keys(body).length > 0 ? { body } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
-    return tOE === false ? p : p.then((r: any) => r.data);
-  };
-
-  const _getShirabeCredential = (params?: any) => {
-    const tOE = params?.throwOnError;
-    const p = getShirabeCredential({ client: clientInstance, throwOnError: tOE === false ? false : true } as any);
-    return tOE === false ? p : p.then((r: any) => r.data);
-  };
-
-  const _resyncShirabeStack = (params?: any) => {
-    const { throwOnError: tOE, ...body } = params ?? {};
-    const p = resyncShirabeStack({ ...(Object.keys(body).length > 0 ? { body } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
-    return tOE === false ? p : p.then((r: any) => r.data);
-  };
-
-  const _reportShirabeRefusal = (params?: any) => {
-    const { throwOnError: tOE, ...body } = params ?? {};
-    const p = reportShirabeRefusal({ ...(Object.keys(body).length > 0 ? { body } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
-    return tOE === false ? p : p.then((r: any) => r.data);
-  };
-
   const _getPatreonConnection = (params?: any) => {
     const tOE = params?.throwOnError;
     const p = getPatreonConnection({ client: clientInstance, throwOnError: tOE === false ? false : true } as any);
@@ -952,6 +1173,80 @@ export function createNadeshikoClient(config: NadeshikoConfig): NadeshikoClient 
   const _completePatreonLink = (params?: any) => {
     const { throwOnError: tOE, ...body } = params ?? {};
     const p = completePatreonLink({ ...(Object.keys(body).length > 0 ? { body } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _getTrackerConnection = (params?: any) => {
+    const tOE = params?.throwOnError;
+    const p = getTrackerConnection({ client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _startTrackerLink = (params?: any) => {
+    const { throwOnError: tOE, ...body } = params ?? {};
+    const p = startTrackerLink({ ...(Object.keys(body).length > 0 ? { body } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _unlinkTracker = (params?: any) => {
+    const tOE = params?.throwOnError;
+    const p = unlinkTracker({ client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _completeTrackerLink = (params?: any) => {
+    const { throwOnError: tOE, ...body } = params ?? {};
+    const p = completeTrackerLink({ ...(Object.keys(body).length > 0 ? { body } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _syncTrackerConnection = (params?: any) => {
+    const tOE = params?.throwOnError;
+    const p = syncTrackerConnection({ client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _updateTrackerSettings = (params?: any) => {
+    const { throwOnError: tOE, ...body } = params ?? {};
+    const p = updateTrackerSettings({ ...(Object.keys(body).length > 0 ? { body } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _listUserDictionaries = (params?: any) => {
+    const tOE = params?.throwOnError;
+    const p = listUserDictionaries({ client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _updateUserDictionaries = (params?: any) => {
+    const { throwOnError: tOE, ...body } = params ?? {};
+    const p = updateUserDictionaries({ ...(Object.keys(body).length > 0 ? { body } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _deleteUserDictionary = (paramsOrId?: any) => {
+    if (typeof paramsOrId === 'number') {
+      return deleteUserDictionary({ throwOnError: true, path: { id: paramsOrId }, client: clientInstance } as any).then((r: any) => r.data);
+    }
+    const params = paramsOrId;
+    const { throwOnError: tOE, id } = params ?? {};
+    const p = deleteUserDictionary({ path: { id }, client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _reserveUserDictionaryUpload = (params?: any) => {
+    const { throwOnError: tOE, ...body } = params ?? {};
+    const p = reserveUserDictionaryUpload({ ...(Object.keys(body).length > 0 ? { body } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _completeUserDictionaryUpload = (paramsOrId?: any) => {
+    if (typeof paramsOrId === 'string') {
+      return completeUserDictionaryUpload({ throwOnError: true, path: { id: paramsOrId }, client: clientInstance } as any).then((r: any) => r.data);
+    }
+    const params = paramsOrId;
+    const { throwOnError: tOE, id } = params ?? {};
+    const p = completeUserDictionaryUpload({ path: { id }, client: clientInstance, throwOnError: tOE === false ? false : true } as any);
     return tOE === false ? p : p.then((r: any) => r.data);
   };
 
@@ -1083,6 +1378,12 @@ export function createNadeshikoClient(config: NadeshikoConfig): NadeshikoClient 
     return tOE === false ? p : p.then((r: any) => r.data);
   };
 
+  const _getAdminOverview = (params?: any) => {
+    const tOE = params?.throwOnError;
+    const p = getAdminOverview({ client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
   const _listAdminReports = (params?: any) => {
     const { throwOnError: tOE, ...query } = params ?? {};
     const p = listAdminReports({ ...(Object.keys(query).length > 0 ? { query } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
@@ -1134,12 +1435,6 @@ export function createNadeshikoClient(config: NadeshikoConfig): NadeshikoClient 
     return tOE === false ? p : p.then((r: any) => r.data);
   };
 
-  const _listAgentActivity = (params?: any) => {
-    const { throwOnError: tOE, ...query } = params ?? {};
-    const p = listAgentActivity({ ...(Object.keys(query).length > 0 ? { query } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
-    return tOE === false ? p : p.then((r: any) => r.data);
-  };
-
   const _getAnnouncement = (params?: any) => {
     const tOE = params?.throwOnError;
     const p = getAnnouncement({ client: clientInstance, throwOnError: tOE === false ? false : true } as any);
@@ -1184,25 +1479,95 @@ export function createNadeshikoClient(config: NadeshikoConfig): NadeshikoClient 
     return tOE === false ? p : p.then((r: any) => r.data);
   };
 
-  const _listAdminRoadmap = (params?: any) => {
-    const tOE = params?.throwOnError;
-    const p = listAdminRoadmap({ client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+  const _listAdminContentRequests = (params?: any) => {
+    const { throwOnError: tOE, ...query } = params ?? {};
+    const p = listAdminContentRequests({ ...(Object.keys(query).length > 0 ? { query } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
     return tOE === false ? p : p.then((r: any) => r.data);
   };
 
-  const _createAdminRoadmapItem = (params?: any) => {
-    const { throwOnError: tOE, ...body } = params ?? {};
-    const p = createAdminRoadmapItem({ ...(Object.keys(body).length > 0 ? { body } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
-    return tOE === false ? p : p.then((r: any) => r.data);
-  };
-
-  const _updateAdminRoadmapItem = (paramsOrId?: any) => {
+  const _updateAdminContentRequest = (paramsOrId?: any) => {
     if (typeof paramsOrId === 'string') {
-      return updateAdminRoadmapItem({ throwOnError: true, path: { itemId: paramsOrId }, client: clientInstance } as any).then((r: any) => r.data);
+      return updateAdminContentRequest({ throwOnError: true, path: { requestId: paramsOrId }, client: clientInstance } as any).then((r: any) => r.data);
     }
     const params = paramsOrId;
-    const { throwOnError: tOE, itemId, ...body } = params ?? {};
-    const p = updateAdminRoadmapItem({ path: { itemId }, ...(Object.keys(body).length > 0 ? { body } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    const { throwOnError: tOE, requestId, ...body } = params ?? {};
+    const p = updateAdminContentRequest({ path: { requestId }, ...(Object.keys(body).length > 0 ? { body } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _mergeAdminContentRequest = (params?: any) => {
+    const { throwOnError: tOE, requestId, ...body } = params ?? {};
+    const p = mergeAdminContentRequest({ path: { requestId }, ...(Object.keys(body).length > 0 ? { body } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _getAdminPatreonOverview = (params?: any) => {
+    const { throwOnError: tOE, ...query } = params ?? {};
+    const p = getAdminPatreonOverview({ ...(Object.keys(query).length > 0 ? { query } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _refreshAllAdminPatreonConnections = (params?: any) => {
+    const tOE = params?.throwOnError;
+    const p = refreshAllAdminPatreonConnections({ client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _unlinkAdminPatreonConnection = (paramsOrId?: any) => {
+    if (typeof paramsOrId === 'number') {
+      return unlinkAdminPatreonConnection({ throwOnError: true, path: { userId: paramsOrId }, client: clientInstance } as any).then((r: any) => r.data);
+    }
+    const params = paramsOrId;
+    const { throwOnError: tOE, userId } = params ?? {};
+    const p = unlinkAdminPatreonConnection({ path: { userId }, client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _refreshAdminPatreonConnection = (paramsOrId?: any) => {
+    if (typeof paramsOrId === 'number') {
+      return refreshAdminPatreonConnection({ throwOnError: true, path: { userId: paramsOrId }, client: clientInstance } as any).then((r: any) => r.data);
+    }
+    const params = paramsOrId;
+    const { throwOnError: tOE, userId } = params ?? {};
+    const p = refreshAdminPatreonConnection({ path: { userId }, client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _listAdminEmails = (params?: any) => {
+    const { throwOnError: tOE, ...query } = params ?? {};
+    const p = listAdminEmails({ ...(Object.keys(query).length > 0 ? { query } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _getAdminEmail = (paramsOrId?: any) => {
+    if (typeof paramsOrId === 'number') {
+      return getAdminEmail({ throwOnError: true, path: { emailId: paramsOrId }, client: clientInstance } as any).then((r: any) => r.data);
+    }
+    const params = paramsOrId;
+    const { throwOnError: tOE, emailId } = params ?? {};
+    const p = getAdminEmail({ path: { emailId }, client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _resendAdminEmail = (paramsOrId?: any) => {
+    if (typeof paramsOrId === 'number') {
+      return resendAdminEmail({ throwOnError: true, path: { emailId: paramsOrId }, client: clientInstance } as any).then((r: any) => r.data);
+    }
+    const params = paramsOrId;
+    const { throwOnError: tOE, emailId } = params ?? {};
+    const p = resendAdminEmail({ path: { emailId }, client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _listAdminEmailSuppressions = (params?: any) => {
+    const { throwOnError: tOE, ...query } = params ?? {};
+    const p = listAdminEmailSuppressions({ ...(Object.keys(query).length > 0 ? { query } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
+    return tOE === false ? p : p.then((r: any) => r.data);
+  };
+
+  const _liftAdminEmailSuppression = (params?: any) => {
+    const { throwOnError: tOE, ...body } = params ?? {};
+    const p = liftAdminEmailSuppression({ ...(Object.keys(body).length > 0 ? { body } : {}), client: clientInstance, throwOnError: tOE === false ? false : true } as any);
     return tOE === false ? p : p.then((r: any) => r.data);
   };
 
@@ -1238,8 +1603,25 @@ export function createNadeshikoClient(config: NadeshikoConfig): NadeshikoClient 
     addSegmentToCollection: _addSegmentToCollection,
     searchCollectionSegments: _searchCollectionSegments,
     removeSegmentFromCollection: _removeSegmentFromCollection,
-    listRoadmap: _listRoadmap,
-    createRoadmapProposal: _createRoadmapProposal,
+    listContentRequests: _listContentRequests,
+    createContentRequest: _createContentRequest,
+    getContentRequestAllowance: _getContentRequestAllowance,
+    listMyContentRequests: _listMyContentRequests,
+    withdrawContentRequest: _withdrawContentRequest,
+    voteContentRequest: _voteContentRequest,
+    unvoteContentRequest: _unvoteContentRequest,
+    boostContentRequest: _boostContentRequest,
+    listNotifications: _listNotifications,
+    getUnreadNotificationCount: _getUnreadNotificationCount,
+    markNotificationsRead: _markNotificationsRead,
+    listWordWatches: _listWordWatches,
+    setWordWatch: _setWordWatch,
+    checkWordWatch: _checkWordWatch,
+    updateWordWatch: _updateWordWatch,
+    deleteWordWatch: _deleteWordWatch,
+    identifyDictionaryWord: _identifyDictionaryWord,
+    getDictionaryKanjiIndex: _getDictionaryKanjiIndex,
+    getDictionaryKanji: _getDictionaryKanji,
     getCoveredWords: _getCoveredWords,
     triggerCoveredWordsUpdate: _triggerCoveredWordsUpdate,
     createMedia: _createMedia,
@@ -1255,17 +1637,21 @@ export function createNadeshikoClient(config: NadeshikoConfig): NadeshikoClient 
     createSegment: _createSegment,
     createSegmentsBatch: _createSegmentsBatch,
     moderateEpisodeSegments: _moderateEpisodeSegments,
-    getShirabeConnection: _getShirabeConnection,
-    startShirabeLink: _startShirabeLink,
-    unlinkShirabe: _unlinkShirabe,
-    completeShirabeLink: _completeShirabeLink,
-    getShirabeCredential: _getShirabeCredential,
-    resyncShirabeStack: _resyncShirabeStack,
-    reportShirabeRefusal: _reportShirabeRefusal,
     getPatreonConnection: _getPatreonConnection,
     startPatreonLink: _startPatreonLink,
     unlinkPatreon: _unlinkPatreon,
     completePatreonLink: _completePatreonLink,
+    getTrackerConnection: _getTrackerConnection,
+    startTrackerLink: _startTrackerLink,
+    unlinkTracker: _unlinkTracker,
+    completeTrackerLink: _completeTrackerLink,
+    syncTrackerConnection: _syncTrackerConnection,
+    updateTrackerSettings: _updateTrackerSettings,
+    listUserDictionaries: _listUserDictionaries,
+    updateUserDictionaries: _updateUserDictionaries,
+    deleteUserDictionary: _deleteUserDictionary,
+    reserveUserDictionaryUpload: _reserveUserDictionaryUpload,
+    completeUserDictionaryUpload: _completeUserDictionaryUpload,
     clearFamiliarMedia: _clearFamiliarMedia,
     forgetFamiliarMedia: _forgetFamiliarMedia,
     createUserReport: _createUserReport,
@@ -1284,22 +1670,31 @@ export function createNadeshikoClient(config: NadeshikoConfig): NadeshikoClient 
     updateCollection: _updateCollection,
     updateCollectionSegment: _updateCollectionSegment,
     getCollectionStats: _getCollectionStats,
+    getAdminOverview: _getAdminOverview,
     listAdminReports: _listAdminReports,
     batchUpdateAdminReports: _batchUpdateAdminReports,
     bulkUpdateAdminReports: _bulkUpdateAdminReports,
     bulkDeleteAdminReports: _bulkDeleteAdminReports,
     updateAdminReport: _updateAdminReport,
     deleteAdminReport: _deleteAdminReport,
-    listAgentActivity: _listAgentActivity,
     getAnnouncement: _getAnnouncement,
     updateAnnouncement: _updateAnnouncement,
     getAdminUsersWithProviders: _getAdminUsersWithProviders,
     listTiers: _listTiers,
     getAdminUserQuota: _getAdminUserQuota,
     updateAdminUserQuota: _updateAdminUserQuota,
-    listAdminRoadmap: _listAdminRoadmap,
-    createAdminRoadmapItem: _createAdminRoadmapItem,
-    updateAdminRoadmapItem: _updateAdminRoadmapItem,
+    listAdminContentRequests: _listAdminContentRequests,
+    updateAdminContentRequest: _updateAdminContentRequest,
+    mergeAdminContentRequest: _mergeAdminContentRequest,
+    getAdminPatreonOverview: _getAdminPatreonOverview,
+    refreshAllAdminPatreonConnections: _refreshAllAdminPatreonConnections,
+    unlinkAdminPatreonConnection: _unlinkAdminPatreonConnection,
+    refreshAdminPatreonConnection: _refreshAdminPatreonConnection,
+    listAdminEmails: _listAdminEmails,
+    getAdminEmail: _getAdminEmail,
+    resendAdminEmail: _resendAdminEmail,
+    listAdminEmailSuppressions: _listAdminEmailSuppressions,
+    liftAdminEmailSuppression: _liftAdminEmailSuppression,
   } as NadeshikoClient;
 }
 

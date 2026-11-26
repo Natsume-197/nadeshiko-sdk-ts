@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { AddExcludedMediaData, AddExcludedMediaErrors, AddExcludedMediaResponses, AddFavoriteMediaData, AddFavoriteMediaErrors, AddFavoriteMediaResponses, AddSegmentToCollectionData, AddSegmentToCollectionErrors, AddSegmentToCollectionResponses, BatchUpdateAdminReportsData, BatchUpdateAdminReportsErrors, BatchUpdateAdminReportsResponses, BulkDeleteAdminReportsData, BulkDeleteAdminReportsErrors, BulkDeleteAdminReportsResponses, BulkUpdateAdminReportsData, BulkUpdateAdminReportsErrors, BulkUpdateAdminReportsResponses, ClearFamiliarMediaData, ClearFamiliarMediaErrors, ClearFamiliarMediaResponses, CompletePatreonLinkData, CompletePatreonLinkErrors, CompletePatreonLinkResponses, CompleteShirabeLinkData, CompleteShirabeLinkErrors, CompleteShirabeLinkResponses, CreateAdminRoadmapItemData, CreateAdminRoadmapItemErrors, CreateAdminRoadmapItemResponses, CreateCollectionData, CreateCollectionErrors, CreateCollectionResponses, CreateEpisodeData, CreateEpisodeErrors, CreateEpisodeResponses, CreateFeedbackData, CreateFeedbackErrors, CreateFeedbackResponses, CreateMediaData, CreateMediaErrors, CreateMediaResponses, CreateRoadmapProposalData, CreateRoadmapProposalErrors, CreateRoadmapProposalResponses, CreateSegmentData, CreateSegmentErrors, CreateSegmentResponses, CreateSegmentsBatchData, CreateSegmentsBatchErrors, CreateSegmentsBatchResponses, CreateUserApiKeyData, CreateUserApiKeyErrors, CreateUserApiKeyResponses, CreateUserReportData, CreateUserReportErrors, CreateUserReportResponses, DeleteAdminReportData, DeleteAdminReportErrors, DeleteAdminReportResponses, DeleteCollectionData, DeleteCollectionErrors, DeleteCollectionResponses, DeleteEpisodeData, DeleteEpisodeErrors, DeleteEpisodeResponses, DeleteMediaData, DeleteMediaErrors, DeleteMediaResponses, DeleteUserActivityByDateData, DeleteUserActivityByDateErrors, DeleteUserActivityByDateResponses, DeleteUserActivityByIdData, DeleteUserActivityByIdErrors, DeleteUserActivityByIdResponses, DeleteUserActivityData, DeleteUserActivityErrors, DeleteUserActivityResponses, ExportUserDataData, ExportUserDataErrors, ExportUserDataResponses, ForgetFamiliarMediaData, ForgetFamiliarMediaErrors, ForgetFamiliarMediaResponses, GetAdminUserQuotaData, GetAdminUserQuotaErrors, GetAdminUserQuotaResponses, GetAdminUsersWithProvidersData, GetAdminUsersWithProvidersErrors, GetAdminUsersWithProvidersResponses, GetAnnouncementData, GetAnnouncementErrors, GetAnnouncementResponses, GetCollectionData, GetCollectionErrors, GetCollectionResponses, GetCollectionStatsData, GetCollectionStatsErrors, GetCollectionStatsResponses, GetCoveredWordsData, GetCoveredWordsErrors, GetCoveredWordsResponses, GetEmailPreferencesByTokenData, GetEmailPreferencesByTokenErrors, GetEmailPreferencesByTokenResponses, GetEpisodeData, GetEpisodeErrors, GetEpisodeResponses, GetFeedbackFormTokenData, GetFeedbackFormTokenErrors, GetFeedbackFormTokenResponses, GetMeData, GetMediaData, GetMediaErrors, GetMediaResponses, GetMeErrors, GetMeResponses, GetPatreonConnectionData, GetPatreonConnectionErrors, GetPatreonConnectionResponses, GetSearchStatsData, GetSearchStatsErrors, GetSearchStatsResponses, GetSegmentContextData, GetSegmentContextErrors, GetSegmentContextResponses, GetSegmentData, GetSegmentErrors, GetSegmentResponses, GetShirabeConnectionData, GetShirabeConnectionErrors, GetShirabeConnectionResponses, GetShirabeCredentialData, GetShirabeCredentialErrors, GetShirabeCredentialResponses, GetStatsOverviewData, GetStatsOverviewErrors, GetStatsOverviewResponses, GetUserActivityHeatmapData, GetUserActivityHeatmapErrors, GetUserActivityHeatmapResponses, GetUserActivityStatsData, GetUserActivityStatsErrors, GetUserActivityStatsResponses, GetUserPreferencesData, GetUserPreferencesErrors, GetUserPreferencesResponses, ListAdminReportsData, ListAdminReportsErrors, ListAdminReportsResponses, ListAdminRoadmapData, ListAdminRoadmapErrors, ListAdminRoadmapResponses, ListAgentActivityData, ListAgentActivityErrors, ListAgentActivityResponses, ListCollectionsData, ListCollectionsErrors, ListCollectionsResponses, ListEpisodesData, ListEpisodesErrors, ListEpisodesResponses, ListExcludedMediaData, ListExcludedMediaErrors, ListExcludedMediaResponses, ListFamiliarMediaData, ListFamiliarMediaErrors, ListFamiliarMediaResponses, ListFavoriteMediaData, ListFavoriteMediaErrors, ListFavoriteMediaResponses, ListMediaData, ListMediaErrors, ListMediaResponses, ListRoadmapData, ListRoadmapErrors, ListRoadmapResponses, ListSegmentRevisionsData, ListSegmentRevisionsErrors, ListSegmentRevisionsResponses, ListSegmentsData, ListSegmentsErrors, ListSegmentsResponses, ListTiersData, ListTiersErrors, ListTiersResponses, ListUserActivityData, ListUserActivityErrors, ListUserActivityResponses, ModerateEpisodeSegmentsData, ModerateEpisodeSegmentsErrors, ModerateEpisodeSegmentsResponses, RemoveExcludedMediaData, RemoveExcludedMediaErrors, RemoveExcludedMediaResponses, RemoveFavoriteMediaData, RemoveFavoriteMediaErrors, RemoveFavoriteMediaResponses, RemoveSegmentFromCollectionData, RemoveSegmentFromCollectionErrors, RemoveSegmentFromCollectionResponses, ReportShirabeRefusalData, ReportShirabeRefusalErrors, ReportShirabeRefusalResponses, RestoreSegmentRevisionData, RestoreSegmentRevisionErrors, RestoreSegmentRevisionResponses, ResyncShirabeStackData, ResyncShirabeStackErrors, ResyncShirabeStackResponses, SearchCollectionSegmentsData, SearchCollectionSegmentsErrors, SearchCollectionSegmentsResponses, SearchData, SearchErrors, SearchMediaData, SearchMediaErrors, SearchMediaResponses, SearchResponses, SearchWordsData, SearchWordsErrors, SearchWordsResponses, StartPatreonLinkData, StartPatreonLinkErrors, StartPatreonLinkResponses, StartShirabeLinkData, StartShirabeLinkErrors, StartShirabeLinkResponses, TrackUserActivityData, TrackUserActivityErrors, TrackUserActivityResponses, TriggerCoveredWordsUpdateData, TriggerCoveredWordsUpdateErrors, TriggerCoveredWordsUpdateResponses, UnlinkPatreonData, UnlinkPatreonErrors, UnlinkPatreonResponses, UnlinkShirabeData, UnlinkShirabeErrors, UnlinkShirabeResponses, UnsubscribeFromEmailData, UnsubscribeFromEmailErrors, UnsubscribeFromEmailResponses, UpdateAdminReportData, UpdateAdminReportErrors, UpdateAdminReportResponses, UpdateAdminRoadmapItemData, UpdateAdminRoadmapItemErrors, UpdateAdminRoadmapItemResponses, UpdateAdminUserQuotaData, UpdateAdminUserQuotaErrors, UpdateAdminUserQuotaResponses, UpdateAnnouncementData, UpdateAnnouncementErrors, UpdateAnnouncementResponses, UpdateCollectionData, UpdateCollectionErrors, UpdateCollectionResponses, UpdateCollectionSegmentData, UpdateCollectionSegmentErrors, UpdateCollectionSegmentResponses, UpdateEmailPreferencesByTokenData, UpdateEmailPreferencesByTokenErrors, UpdateEmailPreferencesByTokenResponses, UpdateEpisodeData, UpdateEpisodeErrors, UpdateEpisodeResponses, UpdateMediaData, UpdateMediaErrors, UpdateMediaResponses, UpdateSegmentData, UpdateSegmentErrors, UpdateSegmentResponses, UpdateUserPreferencesData, UpdateUserPreferencesErrors, UpdateUserPreferencesResponses } from './types.gen';
+import type { AddExcludedMediaData, AddExcludedMediaErrors, AddExcludedMediaResponses, AddFavoriteMediaData, AddFavoriteMediaErrors, AddFavoriteMediaResponses, AddSegmentToCollectionData, AddSegmentToCollectionErrors, AddSegmentToCollectionResponses, BatchUpdateAdminReportsData, BatchUpdateAdminReportsErrors, BatchUpdateAdminReportsResponses, BoostContentRequestData, BoostContentRequestErrors, BoostContentRequestResponses, BulkDeleteAdminReportsData, BulkDeleteAdminReportsErrors, BulkDeleteAdminReportsResponses, BulkUpdateAdminReportsData, BulkUpdateAdminReportsErrors, BulkUpdateAdminReportsResponses, CheckWordWatchData, CheckWordWatchErrors, CheckWordWatchResponses, ClearFamiliarMediaData, ClearFamiliarMediaErrors, ClearFamiliarMediaResponses, CompletePatreonLinkData, CompletePatreonLinkErrors, CompletePatreonLinkResponses, CompleteTrackerLinkData, CompleteTrackerLinkErrors, CompleteTrackerLinkResponses, CompleteUserDictionaryUploadData, CompleteUserDictionaryUploadErrors, CompleteUserDictionaryUploadResponses, CreateCollectionData, CreateCollectionErrors, CreateCollectionResponses, CreateContentRequestData, CreateContentRequestErrors, CreateContentRequestResponses, CreateEpisodeData, CreateEpisodeErrors, CreateEpisodeResponses, CreateFeedbackData, CreateFeedbackErrors, CreateFeedbackResponses, CreateMediaData, CreateMediaErrors, CreateMediaResponses, CreateSegmentData, CreateSegmentErrors, CreateSegmentResponses, CreateSegmentsBatchData, CreateSegmentsBatchErrors, CreateSegmentsBatchResponses, CreateUserApiKeyData, CreateUserApiKeyErrors, CreateUserApiKeyResponses, CreateUserReportData, CreateUserReportErrors, CreateUserReportResponses, DeleteAdminReportData, DeleteAdminReportErrors, DeleteAdminReportResponses, DeleteCollectionData, DeleteCollectionErrors, DeleteCollectionResponses, DeleteEpisodeData, DeleteEpisodeErrors, DeleteEpisodeResponses, DeleteMediaData, DeleteMediaErrors, DeleteMediaResponses, DeleteUserActivityByDateData, DeleteUserActivityByDateErrors, DeleteUserActivityByDateResponses, DeleteUserActivityByIdData, DeleteUserActivityByIdErrors, DeleteUserActivityByIdResponses, DeleteUserActivityData, DeleteUserActivityErrors, DeleteUserActivityResponses, DeleteUserDictionaryData, DeleteUserDictionaryErrors, DeleteUserDictionaryResponses, DeleteWordWatchData, DeleteWordWatchErrors, DeleteWordWatchResponses, ExportUserDataData, ExportUserDataErrors, ExportUserDataResponses, ForgetFamiliarMediaData, ForgetFamiliarMediaErrors, ForgetFamiliarMediaResponses, GetAdminEmailData, GetAdminEmailErrors, GetAdminEmailResponses, GetAdminOverviewData, GetAdminOverviewErrors, GetAdminOverviewResponses, GetAdminPatreonOverviewData, GetAdminPatreonOverviewErrors, GetAdminPatreonOverviewResponses, GetAdminUserQuotaData, GetAdminUserQuotaErrors, GetAdminUserQuotaResponses, GetAdminUsersWithProvidersData, GetAdminUsersWithProvidersErrors, GetAdminUsersWithProvidersResponses, GetAnnouncementData, GetAnnouncementErrors, GetAnnouncementResponses, GetCollectionData, GetCollectionErrors, GetCollectionResponses, GetCollectionStatsData, GetCollectionStatsErrors, GetCollectionStatsResponses, GetContentRequestAllowanceData, GetContentRequestAllowanceErrors, GetContentRequestAllowanceResponses, GetCoveredWordsData, GetCoveredWordsErrors, GetCoveredWordsResponses, GetDictionaryKanjiData, GetDictionaryKanjiErrors, GetDictionaryKanjiIndexData, GetDictionaryKanjiIndexErrors, GetDictionaryKanjiIndexResponses, GetDictionaryKanjiResponses, GetEmailPreferencesByTokenData, GetEmailPreferencesByTokenErrors, GetEmailPreferencesByTokenResponses, GetEpisodeData, GetEpisodeErrors, GetEpisodeResponses, GetFeedbackFormTokenData, GetFeedbackFormTokenErrors, GetFeedbackFormTokenResponses, GetMeData, GetMediaData, GetMediaErrors, GetMediaResponses, GetMeErrors, GetMeResponses, GetPatreonConnectionData, GetPatreonConnectionErrors, GetPatreonConnectionResponses, GetSearchStatsData, GetSearchStatsErrors, GetSearchStatsResponses, GetSegmentContextData, GetSegmentContextErrors, GetSegmentContextResponses, GetSegmentData, GetSegmentErrors, GetSegmentResponses, GetStatsOverviewData, GetStatsOverviewErrors, GetStatsOverviewResponses, GetTrackerConnectionData, GetTrackerConnectionErrors, GetTrackerConnectionResponses, GetUnreadNotificationCountData, GetUnreadNotificationCountErrors, GetUnreadNotificationCountResponses, GetUserActivityHeatmapData, GetUserActivityHeatmapErrors, GetUserActivityHeatmapResponses, GetUserActivityStatsData, GetUserActivityStatsErrors, GetUserActivityStatsResponses, GetUserPreferencesData, GetUserPreferencesErrors, GetUserPreferencesResponses, IdentifyDictionaryWordData, IdentifyDictionaryWordErrors, IdentifyDictionaryWordResponses, LiftAdminEmailSuppressionData, LiftAdminEmailSuppressionErrors, LiftAdminEmailSuppressionResponses, ListAdminContentRequestsData, ListAdminContentRequestsErrors, ListAdminContentRequestsResponses, ListAdminEmailsData, ListAdminEmailsErrors, ListAdminEmailsResponses, ListAdminEmailSuppressionsData, ListAdminEmailSuppressionsErrors, ListAdminEmailSuppressionsResponses, ListAdminReportsData, ListAdminReportsErrors, ListAdminReportsResponses, ListCollectionsData, ListCollectionsErrors, ListCollectionsResponses, ListContentRequestsData, ListContentRequestsErrors, ListContentRequestsResponses, ListEpisodesData, ListEpisodesErrors, ListEpisodesResponses, ListExcludedMediaData, ListExcludedMediaErrors, ListExcludedMediaResponses, ListFamiliarMediaData, ListFamiliarMediaErrors, ListFamiliarMediaResponses, ListFavoriteMediaData, ListFavoriteMediaErrors, ListFavoriteMediaResponses, ListMediaData, ListMediaErrors, ListMediaResponses, ListMyContentRequestsData, ListMyContentRequestsErrors, ListMyContentRequestsResponses, ListNotificationsData, ListNotificationsErrors, ListNotificationsResponses, ListSegmentRevisionsData, ListSegmentRevisionsErrors, ListSegmentRevisionsResponses, ListSegmentsData, ListSegmentsErrors, ListSegmentsResponses, ListTiersData, ListTiersErrors, ListTiersResponses, ListUserActivityData, ListUserActivityErrors, ListUserActivityResponses, ListUserDictionariesData, ListUserDictionariesErrors, ListUserDictionariesResponses, ListWordWatchesData, ListWordWatchesErrors, ListWordWatchesResponses, MarkNotificationsReadData, MarkNotificationsReadErrors, MarkNotificationsReadResponses, MergeAdminContentRequestData, MergeAdminContentRequestErrors, MergeAdminContentRequestResponses, ModerateEpisodeSegmentsData, ModerateEpisodeSegmentsErrors, ModerateEpisodeSegmentsResponses, RefreshAdminPatreonConnectionData, RefreshAdminPatreonConnectionErrors, RefreshAdminPatreonConnectionResponses, RefreshAllAdminPatreonConnectionsData, RefreshAllAdminPatreonConnectionsErrors, RefreshAllAdminPatreonConnectionsResponses, RemoveExcludedMediaData, RemoveExcludedMediaErrors, RemoveExcludedMediaResponses, RemoveFavoriteMediaData, RemoveFavoriteMediaErrors, RemoveFavoriteMediaResponses, RemoveSegmentFromCollectionData, RemoveSegmentFromCollectionErrors, RemoveSegmentFromCollectionResponses, ResendAdminEmailData, ResendAdminEmailErrors, ResendAdminEmailResponses, ReserveUserDictionaryUploadData, ReserveUserDictionaryUploadErrors, ReserveUserDictionaryUploadResponses, RestoreSegmentRevisionData, RestoreSegmentRevisionErrors, RestoreSegmentRevisionResponses, SearchCollectionSegmentsData, SearchCollectionSegmentsErrors, SearchCollectionSegmentsResponses, SearchData, SearchErrors, SearchMediaData, SearchMediaErrors, SearchMediaResponses, SearchResponses, SearchWordsData, SearchWordsErrors, SearchWordsResponses, SetWordWatchData, SetWordWatchErrors, SetWordWatchResponses, StartPatreonLinkData, StartPatreonLinkErrors, StartPatreonLinkResponses, StartTrackerLinkData, StartTrackerLinkErrors, StartTrackerLinkResponses, SyncTrackerConnectionData, SyncTrackerConnectionErrors, SyncTrackerConnectionResponses, TrackUserActivityData, TrackUserActivityErrors, TrackUserActivityResponses, TriggerCoveredWordsUpdateData, TriggerCoveredWordsUpdateErrors, TriggerCoveredWordsUpdateResponses, UnlinkAdminPatreonConnectionData, UnlinkAdminPatreonConnectionErrors, UnlinkAdminPatreonConnectionResponses, UnlinkPatreonData, UnlinkPatreonErrors, UnlinkPatreonResponses, UnlinkTrackerData, UnlinkTrackerErrors, UnlinkTrackerResponses, UnsubscribeFromEmailData, UnsubscribeFromEmailErrors, UnsubscribeFromEmailResponses, UnvoteContentRequestData, UnvoteContentRequestErrors, UnvoteContentRequestResponses, UpdateAdminContentRequestData, UpdateAdminContentRequestErrors, UpdateAdminContentRequestResponses, UpdateAdminReportData, UpdateAdminReportErrors, UpdateAdminReportResponses, UpdateAdminUserQuotaData, UpdateAdminUserQuotaErrors, UpdateAdminUserQuotaResponses, UpdateAnnouncementData, UpdateAnnouncementErrors, UpdateAnnouncementResponses, UpdateCollectionData, UpdateCollectionErrors, UpdateCollectionResponses, UpdateCollectionSegmentData, UpdateCollectionSegmentErrors, UpdateCollectionSegmentResponses, UpdateEmailPreferencesByTokenData, UpdateEmailPreferencesByTokenErrors, UpdateEmailPreferencesByTokenResponses, UpdateEpisodeData, UpdateEpisodeErrors, UpdateEpisodeResponses, UpdateMediaData, UpdateMediaErrors, UpdateMediaResponses, UpdateSegmentData, UpdateSegmentErrors, UpdateSegmentResponses, UpdateTrackerSettingsData, UpdateTrackerSettingsErrors, UpdateTrackerSettingsResponses, UpdateUserDictionariesData, UpdateUserDictionariesErrors, UpdateUserDictionariesResponses, UpdateUserPreferencesData, UpdateUserPreferencesErrors, UpdateUserPreferencesResponses, UpdateWordWatchData, UpdateWordWatchErrors, UpdateWordWatchResponses, VoteContentRequestData, VoteContentRequestErrors, VoteContentRequestResponses, WithdrawContentRequestData, WithdrawContentRequestErrors, WithdrawContentRequestResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -19,24 +19,250 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 };
 
 /**
- * List the public content and feature roadmap
+ * List content requests
  *
- * Returns published roadmap stages only; private proposals and requester identities never appear.
+ * Public list of content requests, sorted by score (votes plus five per boost) or by date. Requester identities never appear.
  */
-export const listRoadmap = <ThrowOnError extends boolean = false>(options?: Options<ListRoadmapData, ThrowOnError>) => (options?.client ?? client).get<ListRoadmapResponses, ListRoadmapErrors, ThrowOnError>({ url: '/v1/roadmap', ...options });
+export const listContentRequests = <ThrowOnError extends boolean = false>(options?: Options<ListContentRequestsData, ThrowOnError>) => (options?.client ?? client).get<ListContentRequestsResponses, ListContentRequestsErrors, ThrowOnError>({ url: '/v1/requests', ...options });
 
 /**
- * Propose content for Nadeshiko
+ * Request content
  *
- * Creates a private proposal after verifying the signed-in reader's active Nadeshiko Patreon membership.
+ * Files a request from a link to AniList, TMDB, MyDramaList, Audible, Amazon or YouTube. When the same title is
+ * already requested, adds the reader's vote to that request instead (200). A request for a title already on
+ * Nadeshiko becomes an UPDATE request for it.
+ *
  */
-export const createRoadmapProposal = <ThrowOnError extends boolean = false>(options: Options<CreateRoadmapProposalData, ThrowOnError>) => (options.client ?? client).post<CreateRoadmapProposalResponses, CreateRoadmapProposalErrors, ThrowOnError>({
+export const createContentRequest = <ThrowOnError extends boolean = false>(options: Options<CreateContentRequestData, ThrowOnError>) => (options.client ?? client).post<CreateContentRequestResponses, CreateContentRequestErrors, ThrowOnError>({
     security: [{
             in: 'cookie',
             name: 'nadeshiko.session_token',
             type: 'apiKey'
         }],
-    url: '/v1/roadmap/proposals',
+    url: '/v1/requests',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * The signed-in reader's request allowance and votes
+ *
+ * Open requests against the limit, this month's boosts, and which active requests the reader voted for, boosted or filed.
+ */
+export const getContentRequestAllowance = <ThrowOnError extends boolean = false>(options?: Options<GetContentRequestAllowanceData, ThrowOnError>) => (options?.client ?? client).get<GetContentRequestAllowanceResponses, GetContentRequestAllowanceErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/requests/me',
+    ...options
+});
+
+/**
+ * List the signed-in reader's own or voted content requests
+ *
+ * Returns requests filed by the signed-in reader (`OWN`) or requests they voted for or boosted (`VOTED`), across all statuses.
+ */
+export const listMyContentRequests = <ThrowOnError extends boolean = false>(options?: Options<ListMyContentRequestsData, ThrowOnError>) => (options?.client ?? client).get<ListMyContentRequestsResponses, ListMyContentRequestsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/requests/mine',
+    ...options
+});
+
+/**
+ * Withdraw your own request
+ *
+ * The requester may withdraw an open request that nobody else has voted for or boosted.
+ */
+export const withdrawContentRequest = <ThrowOnError extends boolean = false>(options: Options<WithdrawContentRequestData, ThrowOnError>) => (options.client ?? client).delete<WithdrawContentRequestResponses, WithdrawContentRequestErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/requests/{requestId}',
+    ...options
+});
+
+/**
+ * Take back a vote
+ */
+export const unvoteContentRequest = <ThrowOnError extends boolean = false>(options: Options<UnvoteContentRequestData, ThrowOnError>) => (options.client ?? client).delete<UnvoteContentRequestResponses, UnvoteContentRequestErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/requests/{requestId}/vote',
+    ...options
+});
+
+/**
+ * Vote for a request
+ *
+ * One vote per account. Voting also subscribes the reader to news on the request.
+ */
+export const voteContentRequest = <ThrowOnError extends boolean = false>(options: Options<VoteContentRequestData, ThrowOnError>) => (options.client ?? client).post<VoteContentRequestResponses, VoteContentRequestErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/requests/{requestId}/vote',
+    ...options
+});
+
+/**
+ * Boost a request (patrons)
+ *
+ * Spends one of this month's boosts on an active request. A boost counts as five votes, is permanent and can be
+ * given once per request. Patrons get boosts each calendar month (UTC) by Patreon tier.
+ *
+ */
+export const boostContentRequest = <ThrowOnError extends boolean = false>(options: Options<BoostContentRequestData, ThrowOnError>) => (options.client ?? client).post<BoostContentRequestResponses, BoostContentRequestErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/requests/{requestId}/boost',
+    ...options
+});
+
+/**
+ * The signed-in reader's notifications, newest first
+ */
+export const listNotifications = <ThrowOnError extends boolean = false>(options?: Options<ListNotificationsData, ThrowOnError>) => (options?.client ?? client).get<ListNotificationsResponses, ListNotificationsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/notifications',
+    ...options
+});
+
+/**
+ * How many of the reader's notifications are unread
+ *
+ * What the bell in the header shows. A partial-index lookup, cheap enough to ask on every page load.
+ */
+export const getUnreadNotificationCount = <ThrowOnError extends boolean = false>(options?: Options<GetUnreadNotificationCountData, ThrowOnError>) => (options?.client ?? client).get<GetUnreadNotificationCountResponses, GetUnreadNotificationCountErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/notifications/unread-count',
+    ...options
+});
+
+/**
+ * Mark notifications as read
+ *
+ * Marks the listed entries as read, or all of the reader's entries when `ids` is left out.
+ */
+export const markNotificationsRead = <ThrowOnError extends boolean = false>(options: Options<MarkNotificationsReadData, ThrowOnError>) => (options.client ?? client).post<MarkNotificationsReadResponses, MarkNotificationsReadErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/notifications/read',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * The signed-in reader's word alerts
+ */
+export const listWordWatches = <ThrowOnError extends boolean = false>(options?: Options<ListWordWatchesData, ThrowOnError>) => (options?.client ?? client).get<ListWordWatchesResponses, ListWordWatchesErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/word-watches',
+    ...options
+});
+
+/**
+ * Watch a word, or switch the alert you have on it
+ *
+ * Creates the reader's alert on a word, or switches their existing alert on the
+ * same word and match mode to the asked mode. The word must be one Japanese word
+ * of up to 16 characters. `FIRST` is refused for a word that already has
+ * sentences in the reader's search, and `NEW_SENTENCES` for a `CONTAINS` search.
+ *
+ */
+export const setWordWatch = <ThrowOnError extends boolean = false>(options: Options<SetWordWatchData, ThrowOnError>) => (options.client ?? client).post<SetWordWatchResponses, SetWordWatchErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/word-watches',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * The reader's alert on one word, if any
+ *
+ * What the search page reads to draw its alert button.
+ */
+export const checkWordWatch = <ThrowOnError extends boolean = false>(options: Options<CheckWordWatchData, ThrowOnError>) => (options.client ?? client).get<CheckWordWatchResponses, CheckWordWatchErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/word-watches/check',
+    ...options
+});
+
+/**
+ * Remove a word alert
+ */
+export const deleteWordWatch = <ThrowOnError extends boolean = false>(options: Options<DeleteWordWatchData, ThrowOnError>) => (options.client ?? client).delete<DeleteWordWatchResponses, DeleteWordWatchErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/word-watches/{watchId}',
+    ...options
+});
+
+/**
+ * Pause, resume or switch a word alert
+ *
+ * `paused: true` pauses the alert. `paused: false` or a new `mode` makes it
+ * active again and starts counting from now, so a long pause does not arrive
+ * as one huge digest.
+ *
+ */
+export const updateWordWatch = <ThrowOnError extends boolean = false>(options: Options<UpdateWordWatchData, ThrowOnError>) => (options.client ?? client).patch<UpdateWordWatchResponses, UpdateWordWatchErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/word-watches/{watchId}',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -55,7 +281,7 @@ export const createRoadmapProposal = <ThrowOnError extends boolean = false>(opti
  * - **Multi-language Support:** Search using Japanese (kanji/kana), Romaji, or English/Spanish
  * - **Boolean Operators:** `AND`, `OR`, `NOT` supported (e.g., `(cat OR dog) AND bird`)
  * - **Phrase Matching:** Use quotes for exact phrases (e.g., `"good morning"`), or pass `exactMatch: true` to the request body
- * - **Wildcards:** `te*t` format (leading wildcards not supported)
+ * - **Wildcards:** `te*t` format (a Japanese term with a leading `*`, such as `*憬*`, searches inside words like `matchMode: CONTAINS`; other leading wildcards are not supported)
  * - **Smart Field Selection:** Automatically chooses optimal search fields based on input type
  *
  * **Input Type Handling**
@@ -131,6 +357,38 @@ export const searchMedia = <ThrowOnError extends boolean = false>(options: Optio
         ...options.headers
     }
 });
+
+/**
+ * Rank Nadeshiko's dictionary entries for one token, for our own server only
+ *
+ * The word card's dictionary lookup. Takes what a stored token carries and
+ * returns ranked candidates in the card's shape. Called by the frontend server,
+ * which owns caching; refused unless the request came through our own Nitro proxy.
+ *
+ */
+export const identifyDictionaryWord = <ThrowOnError extends boolean = false>(options: Options<IdentifyDictionaryWordData, ThrowOnError>) => (options.client ?? client).get<IdentifyDictionaryWordResponses, IdentifyDictionaryWordErrors, ThrowOnError>({ url: '/v1/dictionary/identify', ...options });
+
+/**
+ * Every jōyō and JLPT kanji, for our own server only
+ *
+ * The kanji index page's list: the 2,136 jōyō kanji and any other JLPT kanji,
+ * each with its school grade, JLPT level, newspaper rank, one reading and one
+ * meaning. Called by the frontend server, which caches it.
+ *
+ */
+export const getDictionaryKanjiIndex = <ThrowOnError extends boolean = false>(options?: Options<GetDictionaryKanjiIndexData, ThrowOnError>) => (options?.client ?? client).get<GetDictionaryKanjiIndexResponses, GetDictionaryKanjiIndexErrors, ThrowOnError>({ url: '/v1/dictionary/kanji', ...options });
+
+/**
+ * One kanji's card from Nadeshiko's own dictionary, for our own server only
+ *
+ * What the word card shows when a reader opens one of a word's kanji: readings
+ * and meanings (KANJIDIC2), its parts (KRADFILE), its stroke order (KanjiVG) and
+ * the words written with it that Nadeshiko's subtitles use most. Called by the
+ * frontend server, which caches it; refused unless the request came through our
+ * own Nitro proxy.
+ *
+ */
+export const getDictionaryKanji = <ThrowOnError extends boolean = false>(options: Options<GetDictionaryKanjiData, ThrowOnError>) => (options.client ?? client).get<GetDictionaryKanjiResponses, GetDictionaryKanjiErrors, ThrowOnError>({ url: '/v1/dictionary/kanji/{character}', ...options });
 
 /**
  * Get corpus statistics overview
@@ -523,188 +781,6 @@ export const createUserApiKey = <ThrowOnError extends boolean = false>(options: 
 });
 
 /**
- * Unlink the Shirabe account
- *
- * Forgets the stored key AND asks Shirabe to revoke it, so the reader is not
- * left with a live credential on their Shirabe access list that nothing here
- * can reach again.
- *
- * The local link goes either way. If Shirabe cannot be reached, the reader
- * still gets what they asked for here and can revoke the key themselves at
- * `/account/settings#access`.
- *
- */
-export const unlinkShirabe = <ThrowOnError extends boolean = false>(options?: Options<UnlinkShirabeData, ThrowOnError>) => (options?.client ?? client).delete<UnlinkShirabeResponses, UnlinkShirabeErrors, ThrowOnError>({
-    security: [{
-            in: 'cookie',
-            name: 'nadeshiko.session_token',
-            type: 'apiKey'
-        }],
-    url: '/v1/user/connections/shirabe',
-    ...options
-});
-
-/**
- * Read the linked Shirabe account
- *
- * Whether the signed-in reader has linked a Shirabe account, and what it is
- * shaped like: who they are over there, which dictionaries their stack names,
- * and when we last re-read it.
- *
- * Never returns the stored key. Nothing the browser is shown can be used to
- * act on their Shirabe account.
- *
- */
-export const getShirabeConnection = <ThrowOnError extends boolean = false>(options?: Options<GetShirabeConnectionData, ThrowOnError>) => (options?.client ?? client).get<GetShirabeConnectionResponses, GetShirabeConnectionErrors, ThrowOnError>({
-    security: [{
-            in: 'cookie',
-            name: 'nadeshiko.session_token',
-            type: 'apiKey'
-        }],
-    url: '/v1/user/connections/shirabe',
-    ...options
-});
-
-/**
- * Begin linking a Shirabe account
- *
- * Starts an OAuth 2.0 authorization-code flow (PKCE) against Shirabe and
- * returns where to send the reader. Nothing is stored until they approve.
- *
- * The `state` is the pending flow itself, sealed with a server-side key rather
- * than a handle into server memory: the request that starts the link and the
- * one that finishes it are minutes apart and nothing routes them to the same
- * process.
- *
- */
-export const startShirabeLink = <ThrowOnError extends boolean = false>(options?: Options<StartShirabeLinkData, ThrowOnError>) => (options?.client ?? client).post<StartShirabeLinkResponses, StartShirabeLinkErrors, ThrowOnError>({
-    security: [{
-            in: 'cookie',
-            name: 'nadeshiko.session_token',
-            type: 'apiKey'
-        }],
-    url: '/v1/user/connections/shirabe',
-    ...options
-});
-
-/**
- * Finish linking a Shirabe account
- *
- * Exchanges the one-time code Shirabe redirected back with for a scoped key,
- * reads the reader's dictionary stack, and stores the link.
- *
- * The `state` must be the one this session started the flow with. It carries
- * the account it belongs to, and a mismatch is refused: otherwise somebody who
- * completed their own authorization at Shirabe could hand the callback URL to a
- * signed-in victim and attach their account to the victim's.
- *
- */
-export const completeShirabeLink = <ThrowOnError extends boolean = false>(options: Options<CompleteShirabeLinkData, ThrowOnError>) => (options.client ?? client).post<CompleteShirabeLinkResponses, CompleteShirabeLinkErrors, ThrowOnError>({
-    security: [{
-            in: 'cookie',
-            name: 'nadeshiko.session_token',
-            type: 'apiKey'
-        }],
-    url: '/v1/user/connections/shirabe/callback',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * The reader's Shirabe key, for our own server only
- *
- * Hands the stored Shirabe key to our frontend server so a word lookup can be
- * made AS the reader, which is the entire point of linking an account.
- *
- * Refused unless the request came through our own Nitro proxy (the shared
- * internal secret). A session alone is not enough, even the reader's own: a key
- * that reaches a browser is a key that has been given away, and this one is a
- * live credential on somebody else's service. The reader has no need for it
- * here — it is already listed, and revocable, on their Shirabe account.
- *
- */
-export const getShirabeCredential = <ThrowOnError extends boolean = false>(options?: Options<GetShirabeCredentialData, ThrowOnError>) => (options?.client ?? client).get<GetShirabeCredentialResponses, GetShirabeCredentialErrors, ThrowOnError>({
-    security: [{
-            in: 'cookie',
-            name: 'nadeshiko.session_token',
-            type: 'apiKey'
-        }],
-    url: '/v1/user/connections/shirabe/credential',
-    ...options
-});
-
-/**
- * Reconcile the stored Shirabe stack against a fingerprint a lookup saw
- *
- * Shirabe echoes the calling key's current stack fingerprint on every word
- * lookup. Our frontend server hands it back here, so a reader who switches a
- * dictionary off over there stops being served their cached definitions for it.
- *
- * Cheap by design. When the fingerprint matches what we hold, this only records
- * that the copy was confirmed; only a mismatch costs a round trip to Shirabe.
- *
- * Refused unless the request came through our own Nitro proxy (the shared
- * internal secret), like the credential route beside it. Nothing here is a
- * reader-facing action: the browser never sees a fingerprint, and one supplied
- * by a client would be a client choosing when our copy looks stale.
- *
- */
-export const resyncShirabeStack = <ThrowOnError extends boolean = false>(options: Options<ResyncShirabeStackData, ThrowOnError>) => (options.client ?? client).post<ResyncShirabeStackResponses, ResyncShirabeStackErrors, ThrowOnError>({
-    security: [{
-            in: 'cookie',
-            name: 'nadeshiko.session_token',
-            type: 'apiKey'
-        }],
-    url: '/v1/user/connections/shirabe/resync',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Report that Shirabe refused a reader's key on a lookup
- *
- * A word lookup is where a dead link is actually discovered: the reader's key
- * is sent, Shirabe refuses it, and the lookup quietly answers from the default
- * dictionaries instead. Without this, that refusal was a log line and nothing
- * else -- the settings page went on naming the account, and every later lookup
- * repeated the same doomed round trip.
- *
- * What the status means is Shirabe's own distinction, and the three outcomes
- * are different repairs:
- *
- * * `401` - the key is invalid, expired or revoked. The link is over until the
- * reader makes a new one, and it is marked so the settings page can say so.
- * * `403` - the key works but is missing a permission. The stack is re-read so
- * the stored scopes catch up, which surfaces as a re-consent rather than a
- * repair.
- * * anything else - not an answer about the key. Ignored.
- *
- * Refused unless the request came through our own Nitro proxy (the shared
- * internal secret), like the credential and resync routes beside it. A client
- * that could post here could disconnect its own reader's link at will.
- *
- */
-export const reportShirabeRefusal = <ThrowOnError extends boolean = false>(options: Options<ReportShirabeRefusalData, ThrowOnError>) => (options.client ?? client).post<ReportShirabeRefusalResponses, ReportShirabeRefusalErrors, ThrowOnError>({
-    security: [{
-            in: 'cookie',
-            name: 'nadeshiko.session_token',
-            type: 'apiKey'
-        }],
-    url: '/v1/user/connections/shirabe/refused',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
  * Forget the linked Patreon account
  *
  * Deletes the local encrypted Patreon credentials and membership snapshot.
@@ -766,6 +842,200 @@ export const completePatreonLink = <ThrowOnError extends boolean = false>(option
         'Content-Type': 'application/json',
         ...options.headers
     }
+});
+
+/**
+ * Disconnect the linked anime tracker
+ *
+ * Deletes the encrypted tracker credentials and all synced progress rows for the signed-in reader.
+ */
+export const unlinkTracker = <ThrowOnError extends boolean = false>(options?: Options<UnlinkTrackerData, ThrowOnError>) => (options?.client ?? client).delete<UnlinkTrackerResponses, UnlinkTrackerErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/user/connections/tracker',
+    ...options
+});
+
+/**
+ * Read the linked anime tracker state, catalog coverage, and search filter entries
+ *
+ * Returns the active anime tracker connection (if any), effective patron settings, catalog coverage, and matched progress entries.
+ */
+export const getTrackerConnection = <ThrowOnError extends boolean = false>(options?: Options<GetTrackerConnectionData, ThrowOnError>) => (options?.client ?? client).get<GetTrackerConnectionResponses, GetTrackerConnectionErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/user/connections/tracker',
+    ...options
+});
+
+/**
+ * Begin anime tracker OAuth linking
+ *
+ * Returns the provider's OAuth authorization URL with sealed state bound to the signed-in reader.
+ */
+export const startTrackerLink = <ThrowOnError extends boolean = false>(options: Options<StartTrackerLinkData, ThrowOnError>) => (options.client ?? client).post<StartTrackerLinkResponses, StartTrackerLinkErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/user/connections/tracker',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Complete anime tracker OAuth linking
+ *
+ * Exchanges the one-time OAuth code, stores encrypted credentials, replaces any prior tracker, and runs the initial list sync.
+ */
+export const completeTrackerLink = <ThrowOnError extends boolean = false>(options: Options<CompleteTrackerLinkData, ThrowOnError>) => (options.client ?? client).post<CompleteTrackerLinkResponses, CompleteTrackerLinkErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/user/connections/tracker/callback',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Manually sync the linked anime tracker list
+ *
+ * Fetches the latest anime list from the linked provider and updates catalog matches, subject to tier cooldown.
+ */
+export const syncTrackerConnection = <ThrowOnError extends boolean = false>(options?: Options<SyncTrackerConnectionData, ThrowOnError>) => (options?.client ?? client).post<SyncTrackerConnectionResponses, SyncTrackerConnectionErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/user/connections/tracker/sync',
+    ...options
+});
+
+/**
+ * Update anime tracker sync and spoiler protection settings
+ *
+ * Updates patron-gated tracker settings. Enabling patron perks requires an active Patreon membership; disabling is always allowed.
+ */
+export const updateTrackerSettings = <ThrowOnError extends boolean = false>(options: Options<UpdateTrackerSettingsData, ThrowOnError>) => (options.client ?? client).patch<UpdateTrackerSettingsResponses, UpdateTrackerSettingsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/user/connections/tracker/settings',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * List custom Yomitan dictionaries
+ *
+ * Returns the authenticated user's uploaded custom Yomitan dictionaries, built-in JMdict stack position,
+ * account quota, and current stack fingerprint.
+ *
+ */
+export const listUserDictionaries = <ThrowOnError extends boolean = false>(options?: Options<ListUserDictionariesData, ThrowOnError>) => (options?.client ?? client).get<ListUserDictionariesResponses, ListUserDictionariesErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/user/dictionaries',
+    ...options
+});
+
+/**
+ * Reorder and toggle custom Yomitan dictionaries
+ *
+ * Atomically updates the stack order and enabled flags for the user's custom dictionaries and built-in JMdict.
+ *
+ */
+export const updateUserDictionaries = <ThrowOnError extends boolean = false>(options: Options<UpdateUserDictionariesData, ThrowOnError>) => (options.client ?? client).patch<UpdateUserDictionariesResponses, UpdateUserDictionariesErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/user/dictionaries',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Delete a custom Yomitan dictionary
+ *
+ * Removes one custom dictionary from the authenticated user's account and frees its underlying indexed SQLite file
+ * when no other account references it.
+ *
+ */
+export const deleteUserDictionary = <ThrowOnError extends boolean = false>(options: Options<DeleteUserDictionaryData, ThrowOnError>) => (options.client ?? client).delete<DeleteUserDictionaryResponses, DeleteUserDictionaryErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/user/dictionaries/{id}',
+    ...options
+});
+
+/**
+ * Reserve a direct upload of a custom Yomitan dictionary
+ *
+ * Checks the account's limits and returns a short-lived presigned URL the browser uploads the `.zip` to directly,
+ * bound to the declared size. Complete the upload afterwards to index it.
+ *
+ */
+export const reserveUserDictionaryUpload = <ThrowOnError extends boolean = false>(options: Options<ReserveUserDictionaryUploadData, ThrowOnError>) => (options.client ?? client).post<ReserveUserDictionaryUploadResponses, ReserveUserDictionaryUploadErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/user/dictionaries/uploads',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Complete a direct upload of a custom Yomitan dictionary
+ *
+ * Checks that the reserved upload reached storage with the declared size, then indexes it like a classic upload:
+ * 201 when an identical file was already indexed, 202 while indexing runs.
+ *
+ */
+export const completeUserDictionaryUpload = <ThrowOnError extends boolean = false>(options: Options<CompleteUserDictionaryUploadData, ThrowOnError>) => (options.client ?? client).post<CompleteUserDictionaryUploadResponses, CompleteUserDictionaryUploadErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/user/dictionaries/uploads/{id}/complete',
+    ...options
 });
 
 /**
@@ -1362,6 +1632,24 @@ export const getCollectionStats = <ThrowOnError extends boolean = false>(options
 });
 
 /**
+ * Get live summary counts for the admin dashboard
+ *
+ * Returns lightweight aggregate counts (open reports, open and boosted content requests,
+ * users, active patrons and whether the global announcement banner is on) for the admin
+ * launcher and navigation badges.
+ *
+ */
+export const getAdminOverview = <ThrowOnError extends boolean = false>(options?: Options<GetAdminOverviewData, ThrowOnError>) => (options?.client ?? client).get<GetAdminOverviewResponses, GetAdminOverviewErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }, {
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/admin/overview',
+    ...options
+});
+
+/**
  * List all reports
  *
  * Returns all reports with filtering and cursor pagination.
@@ -1477,32 +1765,6 @@ export const updateAdminReport = <ThrowOnError extends boolean = false>(options:
 });
 
 /**
- * List edits made by the moderation agent
- *
- * Returns segment revisions written under a service credential, newest first,
- * joined to the segment they changed and the report they answered.
- *
- * This is the independent record of what the agent actually did. The agent's own
- * Discord digest reports what it believes it did; this reports what landed in the
- * database. Reading both is how a run that half-failed, or an action the agent
- * did not mention, becomes visible.
- *
- * Each entry carries the pre-edit `snapshot`, so a bad edit can be reverted
- * straight from here through the revision restore endpoint without going hunting
- * for the revision number.
- *
- */
-export const listAgentActivity = <ThrowOnError extends boolean = false>(options?: Options<ListAgentActivityData, ThrowOnError>) => (options?.client ?? client).get<ListAgentActivityResponses, ListAgentActivityErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }, {
-            in: 'cookie',
-            name: 'nadeshiko.session_token',
-            type: 'apiKey'
-        }],
-    url: '/v1/admin/agent-activity',
-    ...options
-});
-
-/**
  * Get current announcement
  *
  * Returns the current announcement if one is active. Public endpoint (no auth required).
@@ -1604,32 +1866,32 @@ export const updateAdminUserQuota = <ThrowOnError extends boolean = false>(optio
 });
 
 /**
- * List every roadmap item, including pending proposals
- *
- * Returns the moderation queue and public items, including requester ids for administrative review.
+ * List content requests with requester and duplicate flags
  */
-export const listAdminRoadmap = <ThrowOnError extends boolean = false>(options?: Options<ListAdminRoadmapData, ThrowOnError>) => (options?.client ?? client).get<ListAdminRoadmapResponses, ListAdminRoadmapErrors, ThrowOnError>({
+export const listAdminContentRequests = <ThrowOnError extends boolean = false>(options?: Options<ListAdminContentRequestsData, ThrowOnError>) => (options?.client ?? client).get<ListAdminContentRequestsResponses, ListAdminContentRequestsErrors, ThrowOnError>({
     security: [{
             in: 'cookie',
             name: 'nadeshiko.session_token',
             type: 'apiKey'
         }],
-    url: '/v1/admin/roadmap',
+    url: '/v1/admin/requests',
     ...options
 });
 
 /**
- * Add content or a feature to the roadmap
+ * Change a content request
  *
- * Creates a team-authored item directly in a public roadmap stage.
+ * Edits a request or moves it between statuses. Declining needs a reason, which readers see. Moving a request to
+ * IN_PROGRESS or RELEASED emails everyone who voted for or boosted it (unless they opted out of request news).
+ *
  */
-export const createAdminRoadmapItem = <ThrowOnError extends boolean = false>(options: Options<CreateAdminRoadmapItemData, ThrowOnError>) => (options.client ?? client).post<CreateAdminRoadmapItemResponses, CreateAdminRoadmapItemErrors, ThrowOnError>({
+export const updateAdminContentRequest = <ThrowOnError extends boolean = false>(options: Options<UpdateAdminContentRequestData, ThrowOnError>) => (options.client ?? client).patch<UpdateAdminContentRequestResponses, UpdateAdminContentRequestErrors, ThrowOnError>({
     security: [{
             in: 'cookie',
             name: 'nadeshiko.session_token',
             type: 'apiKey'
         }],
-    url: '/v1/admin/roadmap',
+    url: '/v1/admin/requests/{requestId}',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -1638,17 +1900,173 @@ export const createAdminRoadmapItem = <ThrowOnError extends boolean = false>(opt
 });
 
 /**
- * Approve, reject, edit, or reorder a roadmap item
+ * Merge a duplicate request into another
  *
- * Updates one proposal or roadmap item; moving a proposal to a public stage publishes it.
+ * Moves the duplicate's voters and boosters to the target (no one counts twice) and declines the duplicate with a pointer to it.
  */
-export const updateAdminRoadmapItem = <ThrowOnError extends boolean = false>(options: Options<UpdateAdminRoadmapItemData, ThrowOnError>) => (options.client ?? client).patch<UpdateAdminRoadmapItemResponses, UpdateAdminRoadmapItemErrors, ThrowOnError>({
+export const mergeAdminContentRequest = <ThrowOnError extends boolean = false>(options: Options<MergeAdminContentRequestData, ThrowOnError>) => (options.client ?? client).post<MergeAdminContentRequestResponses, MergeAdminContentRequestErrors, ThrowOnError>({
     security: [{
             in: 'cookie',
             name: 'nadeshiko.session_token',
             type: 'apiKey'
         }],
-    url: '/v1/admin/roadmap/{itemId}',
+    url: '/v1/admin/requests/{requestId}/merge',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * List linked Patreon connections, tier mapping and manual quota exceptions
+ *
+ * Returns Patreon OAuth configuration status, all linked Patreon memberships with staleness
+ * and tier-match diagnostics, the configured quota/boost tier mapping, and non-Patreon manual
+ * tier or quota override grants.
+ *
+ */
+export const getAdminPatreonOverview = <ThrowOnError extends boolean = false>(options?: Options<GetAdminPatreonOverviewData, ThrowOnError>) => (options?.client ?? client).get<GetAdminPatreonOverviewResponses, GetAdminPatreonOverviewErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/admin/patreon',
+    ...options
+});
+
+/**
+ * Re-sync all linked Patreon memberships immediately
+ *
+ * Runs the Patreon membership refresh pass across every linked account and returns how many
+ * succeeded and failed. Fails with 400 when Patreon OAuth is not configured on this server.
+ *
+ */
+export const refreshAllAdminPatreonConnections = <ThrowOnError extends boolean = false>(options?: Options<RefreshAllAdminPatreonConnectionsData, ThrowOnError>) => (options?.client ?? client).post<RefreshAllAdminPatreonConnectionsResponses, RefreshAllAdminPatreonConnectionsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/admin/patreon/refresh-all',
+    ...options
+});
+
+/**
+ * Unlink a user's Patreon connection
+ *
+ * Deletes the stored Patreon OAuth connection for a user so they can reconnect cleanly or fix
+ * a mismatched link, invalidating quota caches immediately.
+ *
+ */
+export const unlinkAdminPatreonConnection = <ThrowOnError extends boolean = false>(options: Options<UnlinkAdminPatreonConnectionData, ThrowOnError>) => (options.client ?? client).delete<UnlinkAdminPatreonConnectionResponses, UnlinkAdminPatreonConnectionErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/admin/patreon/connections/{userId}',
+    ...options
+});
+
+/**
+ * Force a live Patreon membership refresh for one user
+ *
+ * Contacts Patreon to refresh the stored membership status and entitled tiers for one linked
+ * account, invalidating quota caches immediately.
+ *
+ */
+export const refreshAdminPatreonConnection = <ThrowOnError extends boolean = false>(options: Options<RefreshAdminPatreonConnectionData, ThrowOnError>) => (options.client ?? client).post<RefreshAdminPatreonConnectionResponses, RefreshAdminPatreonConnectionErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/admin/patreon/connections/{userId}/refresh',
+    ...options
+});
+
+/**
+ * List sent emails
+ *
+ * Returns the email send log newest first, with each message's delivery status, plus counts
+ * for the last 24 hours.
+ *
+ */
+export const listAdminEmails = <ThrowOnError extends boolean = false>(options?: Options<ListAdminEmailsData, ThrowOnError>) => (options?.client ?? client).get<ListAdminEmailsResponses, ListAdminEmailsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/admin/emails',
+    ...options
+});
+
+/**
+ * Get one sent email with its SES events
+ *
+ * Returns one send from the log together with every event SES reported for it.
+ *
+ */
+export const getAdminEmail = <ThrowOnError extends boolean = false>(options: Options<GetAdminEmailData, ThrowOnError>) => (options.client ?? client).get<GetAdminEmailResponses, GetAdminEmailErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/admin/emails/{emailId}',
+    ...options
+});
+
+/**
+ * Send a logged email again
+ *
+ * Sends a fresh copy of a sign-in link or welcome email to the same address. A sign-in link is
+ * minted anew, as if the reader had asked for it. The new send appears in the log.
+ *
+ */
+export const resendAdminEmail = <ThrowOnError extends boolean = false>(options: Options<ResendAdminEmailData, ThrowOnError>) => (options.client ?? client).post<ResendAdminEmailResponses, ResendAdminEmailErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/admin/emails/{emailId}/resend',
+    ...options
+});
+
+/**
+ * List suppressed email addresses
+ *
+ * Returns the addresses the site will not write to, newest first.
+ *
+ */
+export const listAdminEmailSuppressions = <ThrowOnError extends boolean = false>(options?: Options<ListAdminEmailSuppressionsData, ThrowOnError>) => (options?.client ?? client).get<ListAdminEmailSuppressionsResponses, ListAdminEmailSuppressionsErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/admin/email-suppressions',
+    ...options
+});
+
+/**
+ * Lift an email suppression
+ *
+ * Removes an address from our suppression list and from the SES account-level list, so mail to
+ * it is attempted again. Complaints are refused.
+ *
+ */
+export const liftAdminEmailSuppression = <ThrowOnError extends boolean = false>(options: Options<LiftAdminEmailSuppressionData, ThrowOnError>) => (options.client ?? client).post<LiftAdminEmailSuppressionResponses, LiftAdminEmailSuppressionErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: 'nadeshiko.session_token',
+            type: 'apiKey'
+        }],
+    url: '/v1/admin/email-suppressions/lift',
     ...options,
     headers: {
         'Content-Type': 'application/json',
